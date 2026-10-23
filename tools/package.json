@@ -1,0 +1,10 @@
+{
+  "name": "song-yuan-map-tools",
+  "private": true,
+  "description": "建置工具：把 Natural Earth 底圖與 D3 內嵌進 index.html（執行 ./build.sh）",
+  "type": "module",
+  "devDependencies": {
+    "d3": "7.9.0",
+    "mapshaper": "0.6.121"
+  }
+}
