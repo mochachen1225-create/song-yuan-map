@@ -1246,7 +1246,7 @@ function vDraw(){
   const path=d3.geoPath(V.proj,c);
   c.beginPath();path(NE.land);c.fillStyle='#f3ead6';c.fill();c.strokeStyle='#7fa3a3';c.lineWidth=1;c.stroke();
   /* 風向箭頭（會慢慢飄） */
-  if(s.season){const [wx,wy]=s.wind,t=performance.now()/1000;c.strokeStyle='rgba(47,111,159,.45)';c.lineWidth=1.6;
+  if(s.wind[0]||s.wind[1]){const [wx,wy]=s.wind,t=performance.now()/1000;c.strokeStyle='rgba(47,111,159,.45)';c.lineWidth=1.6;
     for(let gx=20;gx<W;gx+=46)for(let gy=20;gy<H;gy+=46){const o=((t*18)%46),x=gx+wx*o,y=gy+wy*o;if(vLand(x,y))continue;
       c.beginPath();c.moveTo(x-wx*8,y-wy*8);c.lineTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4-wy*3),y+wy*8-(wy*4+wx*3));c.moveTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4+wy*3),y+wy*8-(wy*4-wx*3));c.stroke();}}
   /* 礁石 */
@@ -1256,14 +1256,16 @@ function vDraw(){
   const lbl=(p,t,col,dy)=>{const [x,y]=vXY(p);c.font='bold 13px sans-serif';c.textAlign='center';c.lineWidth=4;c.strokeStyle='rgba(255,253,246,.92)';c.strokeText(t,x,y+(dy||0));c.fillStyle=col||'#2b2a26';c.fillText(t,x,y+(dy||0));};
   lbl([116.5,26.3],'宋','#4f7a52');lbl([113.3,23.4],'廣州','#6f6a5e');lbl([108.6,14.2],'占城','#6f6a5e');lbl([114,14.8],'南海','#2f6f9f');
   {const [x,y]=vXY(VP.from);c.fillStyle='#b5452f';c.beginPath();c.arc(x,y,4,0,7);c.fill();lbl(VP.from,'泉州','#b5452f',-10);}
-  {const [x,y]=vXY(VP.to),p=1+.25*Math.sin(performance.now()/250);c.strokeStyle='#b5452f';c.lineWidth=2.5;c.beginPath();c.arc(x,y,10*p,0,7);c.stroke();lbl(VP.to,'三佛齊','#b5452f',-16);}
+  lbl(VP.to,'三佛齊','#b5452f',-16);
+  {const [x,y]=vXY(s.to),p=1+.25*Math.sin(performance.now()/250);c.strokeStyle='#b5452f';c.lineWidth=2.5;c.beginPath();c.arc(x,y,10*p,0,7);c.stroke();}
   /* 走過的路 */
   if(s.trail.length>1){c.strokeStyle='rgba(181,69,47,.5)';c.lineWidth=2;c.setLineDash([4,4]);c.beginPath();s.trail.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();c.setLineDash([]);}
   /* 船 */
   c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#8a5a3c';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();
   c.fillStyle='#fff8e6';c.strokeStyle='#c9a35a';c.lineWidth=1;c.beginPath();c.moveTo(1,-9);c.lineTo(5,0);c.lineTo(1,9);c.lineTo(-2,0);c.closePath();c.fill();c.stroke();c.restore();
   /* 手指的目標點 */
-  if(s.tgt){c.strokeStyle='rgba(43,42,38,.35)';c.setLineDash([3,4]);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(s.tgt[0],s.tgt[1]);c.stroke();c.setLineDash([]);}
+  if(s.tgt){c.strokeStyle='rgba(43,42,38,.4)';c.setLineDash([3,4]);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(s.tgt[0],s.tgt[1]);c.stroke();c.setLineDash([]);
+    c.strokeStyle='#2b2a26';c.lineWidth=1.5;c.beginPath();c.arc(s.tgt[0],s.tgt[1],6,0,7);c.moveTo(s.tgt[0]-3,s.tgt[1]);c.lineTo(s.tgt[0]+3,s.tgt[1]);c.moveTo(s.tgt[0],s.tgt[1]-3);c.lineTo(s.tgt[0],s.tgt[1]+3);c.stroke();}
   /* 烏雲：在雲裡的時候整個畫面變暗，看不到目的地，只剩指南針 */
   const [cx,cy]=vXY(VP.cloud),cr=V.u*3.2;
   const g=c.createRadialGradient(cx,cy,cr*.2,cx,cy,cr);g.addColorStop(0,'rgba(90,96,104,.75)');g.addColorStop(1,'rgba(90,96,104,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,cr,0,7);c.fill();
@@ -1281,51 +1283,64 @@ function vDraw(){
 }
 function vPop(html,btns){const p=$('vPop');p.innerHTML=html+(btns&&btns.length?'<div class="vbtns">'+btns.map((b,i)=>'<button data-i="'+i+'"'+(b.alt?' class="alt"':'')+'>'+b.t+'</button>').join('')+'</div>':'');
   p.querySelectorAll('button').forEach(el=>el.onclick=()=>btns[+el.dataset.i].f());}
+/* 從某個港口往外找最近的一片海當起點（港口的點常常在岸上） */
+function vSeaNear(ll){let [x,y]=vXY(ll);const sea=(px,py)=>[[0,0],[3,0],[-3,0],[0,3],[0,-3]].every(([dx,dy])=>!vLand(px+dx,py+dy));
+  for(let r=2;r<80;r+=2)for(let a=0;a<16;a++){const px=x+r*Math.cos(Math.PI/4+a*Math.PI/8),py=y+r*Math.sin(Math.PI/4+a*Math.PI/8);if(sea(px,py))return[px,py];}return[x,y];}
+const P=(t,html)=>(t?'<b class="vt">'+t+'</b>':'')+'<p style="margin:0">'+html+'</p>';
+const SRC=t=>'<small>出處：'+t+'</small>';
 function vStart(){
-  vSize();let [x,y]=vXY(VP.from);
-  /* 泉州在岸上：從港口往外找最近的一片海當起點 */
-  const sea=(px,py)=>[[0,0],[3,0],[-3,0],[0,3],[0,-3]].every(([dx,dy])=>!vLand(px+dx,py+dy));
-  find:for(let r=2;r<60;r+=2)for(let a=0;a<16;a++){const px=x+r*Math.cos(Math.PI/4+a*Math.PI/8),py=y+r*Math.sin(Math.PI/4+a*Math.PI/8);if(sea(px,py)){x=px;y=py;break find;}}
-  V.st={x,y,hd:Math.PI*.75,tgt:null,trail:[],cargo:10,season:0,wind:[0,0],hit:{},seen:{},inCloud:false,done:false,paused:true};
-  vMsg('');vDraw();
-  vPop('<b class="vt">你是南宋泉州的海商</b><p style="margin:0">船上載滿了瓷器，要往南開到<b>三佛齊</b>（今天的蘇門答臘一帶）去賣。泉州市舶司的官員趙汝适寫的《諸蕃志》，就記載了三佛齊。</p><p style="margin:0"><b>第一步：選什麼時候出海？</b></p>',
-    [{t:'夏天出發',f:()=>vSeason(2)},{t:'冬天出發',f:()=>vSeason(1)}]);
-  cancelAnimationFrame(V.raf);let t0=performance.now();const loop=now=>{vStep(Math.min(.05,(now-t0)/1000));t0=now;vDraw();V.raf=requestAnimationFrame(loop);};V.raf=requestAnimationFrame(loop);
+  vSize();cancelAnimationFrame(V.raf);
+  V.st={hd:Math.PI*.75,tgt:null,trail:[],cargo:10,wind:[0,0],hit:{},seen:{},inCloud:false,done:false,paused:true,leg:'out',to:VP.to};
+  [V.st.x,V.st.y]=vSeaNear(VP.from);vMsg('');
+  vPop(P('你是南宋泉州的海商','船上載滿了瓷器，要往南開到<b>三佛齊</b>（今天的蘇門答臘一帶）去賣。泉州市舶司的官員趙汝适寫的《諸蕃志》，就記載了三佛齊。')+P('','<b>第一步：選什麼時候出海？</b>'),
+    [{t:'夏天出發',f:vSummer},{t:'冬天出發',f:vWinter}]);
+  let t0=performance.now();const loop=now=>{vStep(Math.min(.05,(now-t0)/1000));t0=now;vDraw();V.raf=requestAnimationFrame(loop);};V.raf=requestAnimationFrame(loop);
 }
-function vSeason(k){const s=V.st,r=Math.SQRT1_2;s.season=k;s.wind=k===1?[-r,r]:[r,-r];s.paused=false;
-  vPop('');vMsg(k===1?'冬天吹東北季風，風從東北往西南吹（看海上的藍色箭頭）。按住海圖、拖向你想去的方向，船就會朝那裡開。目的地是紅色圓圈。':'夏天吹西南季風，風從西南往東北吹。按住海圖、拖向你想去的方向開開看。');}
+const R2=Math.SQRT1_2;
+/* 夏天：直接說明開不了，問要不要等冬天 */
+function vSummer(){const s=V.st;s.wind=[R2,-R2];
+  vPop(P('夏天開不了船！','夏天吹<b>西南季風</b>，風是往北吹的（看海上的藍色箭頭）。要往南去三佛齊，整趟都是逆風，船開不動。宋元時期，外國商船是<b>夏天乘西南風來、冬天趁東北風走</b>。泉州的官員每年在出海、回航的季節，還會到九日山「祈風」，祈求順風，石刻到今天還在。')+P('','要等到冬天再出發嗎？')+SRC('泉州九日山宋代祈風石刻（世界遺產「泉州：宋元中國的世界海洋商貿中心」的一部分）'),
+    [{t:'要，等冬天',f:vWinter},{t:'不要，回到開頭',alt:true,f:vStart}]);}
+function vWinter(){const s=V.st;s.wind=[-R2,R2];s.paused=false;vPop('');
+  vMsg('冬天吹東北季風，風往西南吹，剛好推著船往南走。點一下海圖，船就會開到那裡；也可以按住拖著走。目的地是紅色圓圈。');}
 function vMsg(t){$('vMsg').textContent=t;}
 function vStep(dt){
   const s=V.st;if(!s||s.paused||s.done)return;
-  if(s.tgt){const want=Math.atan2(s.tgt[1]-s.y,s.tgt[0]-s.x);let d=want-s.hd;d=Math.atan2(Math.sin(d),Math.cos(d));s.hd+=Math.max(-3*dt,Math.min(3*dt,d));
+  if(s.tgt){if(Math.hypot(s.tgt[0]-s.x,s.tgt[1]-s.y)<5&&!s.down){s.tgt=null;return;}
+    const want=Math.atan2(s.tgt[1]-s.y,s.tgt[0]-s.x);let d=want-s.hd;d=Math.atan2(Math.sin(d),Math.cos(d));s.hd+=Math.max(-3*dt,Math.min(3*dt,d));
     const hx=Math.cos(s.hd),hy=Math.sin(s.hd),f=hx*s.wind[0]+hy*s.wind[1];
     const sp=V.u*(f<-.3?.05:.28+.7*Math.max(0,f))*(s.inCloud?.6:1);
     const nx=s.x+hx*sp*dt,ny=s.y+hy*sp*dt;
-    if(!vLand(nx,ny)){s.x=nx;s.y=ny;}else if(!vLand(nx,s.y))s.x=nx;else if(!vLand(s.x,ny))s.y=ny;
-    if(!s.trail.length||Math.hypot(s.x-s.trail[s.trail.length-1][0],s.y-s.trail[s.trail.length-1][1])>4)s.trail.push([s.x,s.y]);
-    if(f<-.3){s.against=(s.against||0)+dt;if(s.against>2.5&&!s.seen.against){s.seen.against=1;vEvent('against');return;}}}
-  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]);if(!s.hit[i]&&Math.hypot(s.x-x,s.y-y)<V.u*1.4){s.hit[i]=1;s.cargo=Math.max(4,s.cargo-2);vEvent('reef',i);}});
+    if(!vLand(nx,ny)){s.x=nx;s.y=ny;}else if(!vLand(nx,s.y))s.x=nx;else if(!vLand(s.x,ny))s.y=ny;else if(!s.down)s.tgt=null;
+    if(!s.trail.length||Math.hypot(s.x-s.trail[s.trail.length-1][0],s.y-s.trail[s.trail.length-1][1])>4)s.trail.push([s.x,s.y]);}
+  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]);if(!s.hit[s.leg+i]&&Math.hypot(s.x-x,s.y-y)<V.u*1.4){s.hit[s.leg+i]=1;s.cargo=Math.max(4,s.cargo-2);vEvent('reef');}});
   const [cx,cy]=vXY(VP.cloud),inC=Math.hypot(s.x-cx,s.y-cy)<V.u*2.6;
   if(inC&&!s.inCloud&&!s.seen.cloud){s.seen.cloud=1;s.inCloud=true;vEvent('cloud');return;}s.inCloud=inC;
-  const [tx,ty]=vXY(VP.to);if(Math.hypot(s.x-tx,s.y-ty)<V.u*1.2){s.done=true;vEvent('arrive');}
+  const [tx,ty]=vXY(s.to);if(Math.hypot(s.x-tx,s.y-ty)<V.u*1.2){s.done=true;vEvent(s.leg==='out'?'arrive':'home');}
 }
-function vEvent(k,i){
-  const s=V.st;s.paused=true;s.tgt=null;const go=()=>{s.paused=false;vPop('');};
-  if(k==='against')vPop('<b class="vt">逆風，船幾乎不動！</b><p style="margin:0">夏天的西南季風是往北吹的，要往南去的船整趟都在逆風。宋元時期，外國商船是<b>夏天乘西南風來、冬天趁東北風走</b>；泉州的官員每年還會在出海、回航的季節到九日山「祈風」，石刻到今天還在。</p><small>出處：泉州九日山宋代祈風石刻（世界遺產「泉州：宋元中國的世界海洋商貿中心」的一部分）</small>',
-    [{t:'回港，等冬天再出發',f:()=>{vStart();vSeason(1);}}]);
-  else if(k==='reef')vPop('<b class="vt">撞到礁石了！</b><p style="margin:0">南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的貨物泡水了。</p><small>出處：周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。</small>',
+function vEvent(k){
+  const s=V.st;s.paused=true;s.tgt=null;s.down=false;const go=()=>{s.paused=false;vPop('');};
+  const goods=s.leg==='out'?'瓷器':'香料';
+  if(k==='reef')vPop(P('撞到礁石了！','南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的'+goods+'泡水了。')+SRC('周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。'),
     [{t:'繼續開',f:go}]);
-  else if(k==='cloud')vPop('<b class="vt">陰天，看不到太陽和星星！</b><p style="margin:0">宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。右上角的指南針紅色那頭指著<b>南方</b>。三佛齊在南邊偏西一點，照著指南針開出雲區吧！</p><small>出處：朱彧《萍洲可談》（1119），是目前所知最早記載航海用指南針的書之一。</small>',
+  else if(k==='cloud')vPop(P('陰天，看不到太陽和星星！','宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。右上角的指南針紅色那頭指著<b>南方</b>。三佛齊在南邊偏西一點，照著指南針開出雲區吧！')+SRC('朱彧《萍洲可談》（1119），是目前所知最早記載航海用指南針的書之一。'),
     [{t:'看指南針開船',f:go}]);
-  else if(k==='arrive'){const bad=10-s.cargo;
-    vPop('<b class="vt">平安抵達三佛齊！</b><p style="margin:0">'+(bad?'有 '+bad/2+' 次撞到礁石，泡水的瓷器賣不掉，':'一路順利，')+'剩下 <b>'+s.cargo+' 成</b>的瓷器賣掉，換成<b>香料</b>帶回泉州。1974 年在泉州灣出土的宋代海船上，就挖到了香料。</p><p style="margin:0"><b>想一想：什麼時候回家？</b>要等到夏天，西南季風才會把船推回北方。</p><small>出處：泉州灣宋代海船出土文物；九日山祈風石刻。</small>',
-      [{t:'再開一次',f:()=>vStart()}]);
+  else if(k==='arrive'){const bad=(10-s.cargo)/2;
+    vPop(P('平安抵達三佛齊！',(bad?'撞到礁石 '+bad+' 次，泡水的瓷器賣不掉，':'一路順利，')+'剩下 <b>'+s.cargo+' 成</b>的瓷器賣掉，換成<b>香料</b>。1974 年在泉州灣出土的宋代海船上，就挖到了香料。')+P('','<b>想一想：什麼時候開船回泉州？</b>'),
+      [{t:'冬天',f:()=>vPop(P('冬天回不去！','冬天吹東北季風，風往南吹。要往北回泉州，整趟都是逆風。')+P('','要等到哪個季節？'),[{t:'夏天',f:vBack}])},{t:'夏天',f:vBack}]);
     vMsg('');}
+  else if(k==='home'){const bad=(10-s.cargo)/2;
+    vPop(P('平安回到泉州！','你一來一回，<b>冬天</b>乘東北季風往南、<b>夏天</b>乘西南季風往北，跟宋代的海商一樣，都要看季風的時間出海。'+(s.cargo<10?'這一趟撞到礁石，有些貨物泡水了，':'')+'船上的香料要先交給<b>市舶司</b>檢查、抽稅，才能拿去賣。')+SRC('九日山祈風石刻；宋代在泉州設市舶司管理商船、收稅。'),
+      [{t:'再開一次',f:vStart}]);vMsg('');}
 }
+/* 回程：夏天，從三佛齊開回泉州 */
+function vBack(){const s=V.st;s.leg='back';s.to=VP.from;s.wind=[R2,-R2];s.done=false;s.cargo=10;s.trail=[];s.seen.cloud=1;
+  vPop(P('答對了！','夏天吹<b>西南季風</b>，風往北吹，剛好把船推回泉州。船上換成了香料，出發吧！'),[{t:'開船回泉州',f:()=>{s.paused=false;vPop('');vMsg('夏天吹西南季風，點一下海圖讓船開過去，目的地是泉州。');}}]);}
 function vPtr(e){const r=V.cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+/* 點一下：船開到那裡；按住拖：船跟著手指 */
 V.cv.addEventListener('pointerdown',e=>{if(!V.st||V.st.paused)return;V.cv.setPointerCapture(e.pointerId);V.st.tgt=vPtr(e);V.st.down=true;});
 V.cv.addEventListener('pointermove',e=>{if(V.st&&V.st.down&&!V.st.paused)V.st.tgt=vPtr(e);});
-const vUp=()=>{if(V.st){V.st.down=false;V.st.tgt=null;}};V.cv.addEventListener('pointerup',vUp);V.cv.addEventListener('pointercancel',vUp);
+const vUp=()=>{if(V.st)V.st.down=false;};V.cv.addEventListener('pointerup',vUp);V.cv.addEventListener('pointercancel',vUp);
 function openVoyage(){$('voy').hidden=false;vStart();}
 function closeVoyage(){cancelAnimationFrame(V.raf);$('voy').hidden=true;}
 $('vClose').onclick=closeVoyage;
