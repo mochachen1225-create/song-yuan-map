@@ -20,6 +20,9 @@
 - **兩個圖層**：政權、商貿（海上絲路、陸路驛站）
 - **點國家**：看各政權的比較表
 - 手機可以左右滑換站、兩指縮放拖曳
+- **兩個小遊戲**（每一關的說明都附出處）
+  - 🎯 回回砲打襄陽：https://mochachen1225-create.github.io/song-yuan-map/#trebuchet
+  - ⛵ 泉州海商下南洋（季風、指南針、水密隔艙）：https://mochachen1225-create.github.io/song-yuan-map/#voyage
 
 不用安裝，也不用網路：下載 `index.html`，用瀏覽器打開就能用。
 

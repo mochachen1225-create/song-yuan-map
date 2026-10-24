@@ -139,6 +139,19 @@ button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--seal);outl
 .gfire:disabled{opacity:.5;cursor:default}
 .gmsg{margin:0;font-size:15.5px;line-height:1.6;min-height:3.2em}
 .gnote{margin:0;font-size:11.5px;color:var(--muted)}
+/* 開船小遊戲 */
+.vwrap{position:relative}
+.vfast{position:absolute;top:6px;right:6px;border:0;border-radius:999px;padding:7px 12px;font-size:14px;font-weight:700;cursor:pointer;background:rgba(251,247,238,.95);color:var(--ink);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.vfast[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+#vCv{width:100%;display:block;border-radius:12px;background:#cfe6e8;touch-action:none;cursor:crosshair}
+.vpop{position:absolute;left:8px;right:8px;bottom:8px;max-height:calc(100% - 16px);overflow:auto;overscroll-behavior:contain;background:rgba(251,247,238,.97);border-radius:14px;padding:12px 14px;box-shadow:0 4px 0 rgba(0,0,0,.15);display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.65}
+.vpop:empty{display:none}
+.vpop b.vt{font-family:var(--f-disp);font-size:17px}
+.vpop small{color:var(--muted);font-size:12px;line-height:1.5}
+.vpop .vbtns{display:flex;gap:8px;flex-wrap:wrap}
+.vpop .vbtns button{border:0;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:700;cursor:pointer;background:var(--ink);color:var(--paper)}
+.vpop .vbtns button.alt{background:var(--paper2);color:var(--ink)}
+
 
 .blk.like{background:#eaf6ee;border:1.5px solid #a9d3b5}
 .blk.like .badge{background:#2f7a4c;color:#fff;align-self:flex-start}
@@ -227,6 +240,15 @@ table.t th{background:var(--paper2);font-weight:700;white-space:nowrap}
   <div class="track" id="track"></div>
   <button class="nav" id="next" aria-label="下一站">›</button>
 </nav>
+<div class="game" id="voy" role="dialog" aria-modal="true" aria-labelledby="vTtl" hidden>
+  <div class="gbox">
+    <div class="ghd"><b id="vTtl">泉州海商下南洋</b><button class="gx" id="vClose" aria-label="關閉">✕</button></div>
+    <div class="vwrap"><canvas id="vCv" aria-label="從泉州到三佛齊的海圖"></canvas><button class="vfast" id="vFast" aria-pressed="false">⏩ 加速</button>
+      <div class="vpop" id="vPop"></div></div>
+    <p class="gmsg" id="vMsg" aria-live="polite"></p>
+    <p class="gnote">海圖是真實的海岸線；風、雲、礁石的位置和船速是為了遊戲簡化過的。每一關的說明都有出處。</p>
+  </div>
+</div>
 <div class="game" id="game" role="dialog" aria-modal="true" aria-labelledby="gTtl" hidden>
   <div class="gbox">
     <div class="ghd"><b id="gTtl">投石機打襄陽</b><button class="gx" id="gClose" aria-label="關閉">✕</button></div>
@@ -415,12 +437,13 @@ arrowKinds:{
 },
 
 /* ---------- 關鍵站 ----------
+   yr：這一站大約的年份（數字；商貿圖層用它決定哪些地點已經出現）
    view：這一站要看的範圍 [西經度, 北緯度, 東經度, 南緯度]
    regions：{p:政權, s:形狀(可多個), at:國名位置, n:地圖上的國名, faded:變淡}
    extra：課外補充 {k:類別, t:標題, s:內容, game:小遊戲}，顯示在「課本」頁籤，標明不用背
    people：情境想像（第一人稱），ask＝如果是你（不用作答） */
 stations:[
-{id:'s947', y:'947', t:'契丹建遼', view:[100,51,128,33],
+{id:'s947', yr:947, y:'947', t:'契丹建遼', view:[100,51,128,33],
  extra:[{k:'想一想',t:'為什麼燕雲十六州這麼重要？',s:'燕雲十六州靠著燕山、太行山，山裡有很多關口，再加上長城，本來是擋住北方騎兵的天然屏障。山的南邊，就是又平又大的華北平原。燕雲送出去以後，北方的騎兵一出山口就是大平原，黃河以北幾乎沒有山可以擋，可以一路往南打。石敬瑭為了自己當皇帝，等於把自家大門的鑰匙交給了別人。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading'], labels:['nuzhen','tubo','mongolp'],
@@ -435,7 +458,7 @@ stations:[
   {n:'契丹的首領', r:'決定', story:'唐朝滅亡以後，中原亂成一團。有個叫石敬瑭的人想當皇帝，來請我們出兵幫他，還答應事成後把燕雲十六州送給我們。這正是我們的機會：那裡能種糧，又是打仗的好位置。', ask:'別人送上門的好處，背後可能要付出什麼代價？'},
   {n:'中原的守將', r:'對手', story:'我們一直守著北邊的城。結果不是被打下來的，是上面的人為了自己當皇帝，把這些城割給了契丹。一紙約定，十六州就換了主人。', ask:'一個人為了自己的位子，把國家的土地送出去，你覺得怎麼樣？'}
  ]},
-{id:'s960', y:'960', t:'北宋建立', view:[97,48,128,20],
+{id:'s960', yr:960, y:'960', t:'北宋建立', view:[97,48,128,20],
  extra:[{k:'冷知識',t:'沒有山可以守，只好種樹',s:'北宋拿不回燕雲，北邊沒有大山可以擋，只好在河北的邊界種了一大片樹林，用來擋遼國的騎兵。後來宋要聯合金國打遼的時候，自己把這片樹林砍掉了。'},{k:'冷知識',t:'宋太宗想搶回燕雲（979年）',s:'宋太宗曾經帶兵北伐，想拿回燕雲十六州，結果在高梁河（今天的北京附近）被遼打得大敗。之後宋朝一直沒能拿回燕雲。石敬瑭送出去很容易，要拿回來卻很難。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,30],n:'北宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['bianjing','dading','hangzhou','guangzhou'], labels:['tubo','nuzhen','japan'],
@@ -450,7 +473,7 @@ stations:[
   {n:'宋太祖趙匡胤', r:'決定', story:'我建立了宋朝，定都汴京。我要讓讀書人來管理國家，這是我選的方向。可是北邊的燕雲十六州還在遼手上，以後要靠誰拿回來呢？', ask:'重視讀書人和重視軍隊，你覺得一個國家能兩個都顧到嗎？'},
   {n:'遼國的貴族', r:'對手', story:'南邊新建了一個宋朝，聽說他們最看重讀書人。只要燕雲十六州在我們手上，宋就很難打過來。', ask:'握著對方拿不回去的土地，有什麼好處？'}
  ]},
-{id:'schan', y:'真宗時', t:'澶淵之盟', view:[106,44,125,31],
+{id:'schan', yr:1005, y:'真宗時', t:'澶淵之盟', view:[106,44,125,31],
  extra:[{k:'數字',t:'歲幣到底有多少？',s:'一開始的約定是：宋每年給遼銀 10 萬兩、絹 20 萬匹。宋朝的一兩大約 40 公克，所以光是銀子，每年就大約 4 公噸。換來的是宋遼之間大約一百年的和平。想一想：用今天的銀價換算，數字看起來好像不大，但當時的銀子比現在珍貴得多，所以不能直接比。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,43.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['chanzhou','bianjing','dading'], labels:[],
@@ -467,7 +490,7 @@ stations:[
   {n:'宋真宗', r:'決定', story:'遼軍打到澶州，我親自帶兵上前線。可是朝廷算過，和遼一直打下去花的錢太多。每年付歲幣，換來邊境安穩，你說划不划算？', ask:'如果你是宋真宗，你會繼續打，還是付錢換和平？'},
   {n:'遼國的將領', r:'對手', story:'我們打到這裡，宋的皇帝親自出來了，再打下去我們也會有損失。每年拿銀子和絹，兩國還以兄弟相稱，這樣的條件不錯。', ask:'對遼來說，簽約比繼續打好在哪裡？'}
  ]},
-{id:'s1038', y:'1038', t:'西夏建國', view:[96,47,125,28],
+{id:'s1038', yr:1038, y:'1038', t:'西夏建國', view:[96,47,125,28],
  extra:[{k:'冷知識',t:'世界最早的紙幣之一：交子',s:'四川的商人先開始用紙做的「交子」代替鐵錢。1023 年，政府設立「交子務」，由官方來發行，這是世界上最早的官方紙幣之一。後來政府發得太多，交子就越來越不值錢。想一想：錢印太多，會發生什麼事？'}],
  regions:[{p:'liao',s:['LIAO'],at:[113,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,31],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['xingqing','bianjing','dading'], labels:['tubo','nuzhen'],
@@ -482,7 +505,7 @@ stations:[
   {n:'遼國的官員', r:'對手', story:'西邊的西夏、東北的女真，還有高麗，都來向我們稱臣納貢。現在遼是東亞的老大，大家都得看我們的臉色。', ask:'當老大的感覺很好，可是你覺得老大的位置能一直坐穩嗎？'},
   {n:'西北邊境的宋朝百姓', r:'百姓', story:'以前只怕北邊的遼，現在西邊也多了西夏。我們的村子在兩個國家中間，大家晚上都睡不太安穩。', ask:'住在兩國交界的地方，你最擔心什麼？'}
  ]},
-{id:'s1115', y:'1115', t:'金國建立', view:[104,52,138,30],
+{id:'s1115', yr:1115, y:'1115', t:'金國建立', view:[104,52,138,30],
  extra:[{k:'冷知識',t:'坐船去結盟：海上之盟',s:'遼擋在宋和金的中間，宋的使者只好坐船橫渡渤海去找金國，約好一起打遼：金打遼的中京，宋打燕京。因為是在海上往來談成的，所以叫「海上之盟」。'}],
  regions:[{p:'liao',s:['LIAO'],at:[110,46.5],n:'遼'},{p:'jin',s:['JINE'],at:[129.5,46],n:'金'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading','bianjing'], labels:['japan'],
@@ -498,7 +521,7 @@ stations:[
   {n:'女真的首領', r:'決定', story:'我們女真人一直要向遼稱臣納貢。現在我們夠強了，我決定建立金國，不再當遼的小弟，還要和遼一決高下。', ask:'如果你是首領，什麼時候才是「夠強、可以反抗」的時候？'},
   {n:'東北的女真百姓', r:'百姓', story:'以前每年都要準備東西送去遼國。聽說首領建了金國，以後不用再送了嗎？可是要打仗，家裡的年輕人都要上戰場。', ask:'不用再送禮了，可是要打仗，你覺得值得嗎？'}
  ]},
-{id:'s1125', y:'1125', t:'金宋滅遼', view:[100,52,136,30],
+{id:'s1125', yr:1125, y:'1125', t:'金宋滅遼', view:[100,52,136,30],
  regions:[{p:'jin',s:['JIN6'],at:[124,46.5],n:'金'},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading','bianjing'], labels:[],
  arrows:[{pts:[[126,45],[122.5,43],[120,41.9]], k:'atk', label:'金', la:[124.5,44.6]},{pts:[[115,37.2],[115.8,39],[117.6,40.5]], k:'atk', label:'宋', la:[114.4,38.6]}],
@@ -513,7 +536,7 @@ stations:[
   {n:'北宋朝廷的大臣', r:'決定', story:'金國派人來，說要一起打遼。大家討論：和金聯手，遼就會被打敗。只是，我們真的了解金國嗎？', ask:'和一個不熟的新朋友聯手，你會擔心什麼？'},
   {n:'金國的將領', r:'對手', story:'和宋一起打遼，我看得很清楚：宋軍打得很吃力，根本不怎麼樣。等遼滅了，下一個……', ask:'從這位將領的話，你猜下一步會發生什麼事？'}
  ]},
-{id:'s1127', y:'1127', t:'靖康之禍・宋室南遷', view:[103,44,125,25],
+{id:'s1127', yr:1127, y:'1127', t:'靖康之禍・宋室南遷', view:[103,44,125,25],
  regions:[{p:'jin',s:['JIN'],at:[113,38.5],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['bianjing2','linan','zhongdu'], labels:[],
  arrows:[{pts:[[116.4,39.6],[115.6,37.3],[114.6,35.3]], k:'atk', label:'金兵南下', la:[117.6,37.4]},{pts:[[114.6,34.2],[117,32.3],[119.6,30.8]], k:'move', label:'宋室南遷', la:[116.4,31.7]}],
@@ -529,7 +552,7 @@ stations:[
   {n:'金國的將領', r:'決定', story:'滅了遼以後，我們發現宋軍不難打。我下令南下，一路打到汴京。城門攻破了，宋朝的皇室都成了我們的俘虜。', ask:'打勝仗的一方，接下來最可能想要什麼？'},
   {n:'南遷的宋朝皇室', r:'決定', story:'汴京沒了，皇室的人被抓走了。剩下的我們只能往南走，到南方重新撐起宋朝。', ask:'首都被攻破了，如果是你，會放棄還是重新開始？'}
  ]},
-{id:'speace', y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
+{id:'speace', yr:1142, y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
  extra:[{k:'想一想',t:'要打，還是要和？兩邊都在吵',s:'不只宋朝在吵，金國也在吵。南宋朝廷分成「主戰派」（例如岳飛、韓世忠）和「主和派」（以秦檜為代表），宋高宗比較想議和。金國那邊，完顏昌（撻懶）曾經主張把河南的土地還給宋；完顏宗弼（兀朮）堅決反對，後來又出兵把河南拿了回來。最後兩國還是簽了和議，南北對峙。'},{k:'冷知識',t:'岳飛為什麼會死？',s:'1142 年初，宋高宗下令處死岳飛。據記載，金國將領完顏宗弼曾說「必殺飛，始可和」，意思是一定要殺了岳飛，才能講和。岳飛的死，和宋金和議脫不了關係。'}],
  regions:[{p:'jin',s:['JIN'],at:[115,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['linan','zhongdu','bianjing2','xingqing'], labels:['tubo','japan'],
@@ -546,7 +569,7 @@ stations:[
   {n:'岳飛', r:'決定', story:'靖康年間的恥辱，到現在還沒洗刷。我帶兵抗金，希望收復原來的土地。我把心裡的憤恨寫成了〈滿江紅〉。', ask:'一邊想打回北方，一邊想議和，如果你是皇帝，你會聽哪一邊？'},
   {n:'金國的將領', r:'對手', story:'我們一次又一次南下，可是宋軍在長江一帶擋得很緊，怎麼都過不去。再打下去也不划算，不如讓宋向我們稱臣、送貢品。', ask:'打不過去的時候，用談判拿到好處，算不算一種贏？'}
  ]},
-{id:'smongol', y:'13世紀初', t:'蒙古崛起・第一次西征', view:[46,56,120,28],
+{id:'smongol', yr:1206, y:'13世紀初', t:'蒙古崛起・第一次西征', view:[46,56,120,28],
  regions:[{p:'mongol',s:['MONGOL'],at:[101,46],n:'蒙古'},{p:'jin',s:['JIN'],at:[116,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['helin','yemili','samarkand'], labels:[],
  arrows:[{pts:[[102.8,47.2],[93,47.3],[83.6,46.5],[74,42],[67,39.6],[58,37.8],[51,38.5],[47.5,43],[50,47.5]], k:'w1', label:'第一次西征（1218～1223）', la:[60,45]}],
@@ -561,7 +584,7 @@ stations:[
   {n:'鐵木真（成吉思汗）', r:'決定', story:'草原上的部族以前各打各的。我把大家統一起來，建立蒙古國，各部首領尊稱我為「成吉思汗」。現在我們的力量集中了，要往西走得更遠。', ask:'一群人變成一個團隊之後，力量為什麼會變大？'},
   {n:'西夏的百姓', r:'對手', story:'北方新出現的蒙古越來越強，大軍朝我們打過來了。這次，我們的國家撐不住了。', ask:'旁邊突然出現一個很強的國家，小國會怎麼樣？'}
  ]},
-{id:'s1234', y:'1234', t:'蒙古與南宋滅金', view:[96,51,128,22],
+{id:'s1234', yr:1234, y:'1234', t:'蒙古與南宋滅金', view:[96,51,128,22],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'蒙古'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['helin','linan','bianjing2'], labels:['japan','tubo'],
  arrows:[{pts:[[110,42.5],[112.2,38.5],[113.6,35.6]], k:'atk', label:'蒙古', la:[109.6,39.6]},{pts:[[113.2,30.5],[113.6,32.6],[114,34.2]], k:'atk', label:'南宋', la:[111.6,31.6]}],
@@ -577,7 +600,7 @@ stations:[
   {n:'蒙古的將領', r:'決定', story:'和南宋一起打金，金很快就倒了。現在黃河流域都歸我們管，南邊就是南宋。', ask:'從他的話，你猜蒙古下一個目標是誰？'},
   {n:'金國的士兵', r:'對手', story:'北邊是蒙古，南邊是南宋，兩邊一起打過來。我們被夾在中間，撐不下去了。', ask:'被兩邊夾攻的時候，還有什麼辦法？'}
  ]},
-{id:'swest', y:'1235～1260', t:'三次西征・四大汗國', view:[26,59,96,27],
+{id:'swest', yr:1235, y:'1235～1260', t:'三次西征・四大汗國', view:[26,59,96,27],
  extra:[{k:'同時的世界',t:'蒙古打到歐洲（1241年）',s:'第二次西征時，蒙古軍在波蘭的列格尼卡、匈牙利的莫希，接連打敗歐洲的騎士。同一年年底，大汗窩闊臺過世，蒙古軍隔年就撤回去了。一般認為，這是歐洲沒有被繼續往西打的原因之一。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'蒙古'},{p:'kipchak',s:['KIPCHAK'],at:[46,54.5],n:'欽察汗國',small:1},{p:'ogedei',s:['OGEDEI'],at:[81,49.5],n:'窩闊臺汗國',small:1},{p:'chagatai',s:['CHAGATAI'],at:[71,42.5],n:'察合臺汗國',small:1},{p:'ilkhan',s:['ILKHAN'],at:[55,32],n:'伊兒汗國',small:1},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1}],
  places:['helin','yemili','samarkand','sarai','baoda'], labels:['europe','india'],
@@ -597,7 +620,7 @@ stations:[
   {n:'成吉思汗的繼位者', r:'決定', story:'祖先開始的西征，我們要繼續。一次又一次往西，打下的地方就建立汗國。', ask:'一直往外打，對蒙古有什麼好處？可能又有什麼壞處？'},
   {n:'歐洲城市的居民', r:'百姓', story:'從東方來的騎兵到了我們這裡。他們說的話、穿的衣服，都和我們完全不一樣。', ask:'第一次遇到完全不認識的民族，你會害怕還是好奇？'}
  ]},
-{id:'s1271', y:'1271', t:'忽必烈建元', view:[96,50,135,17],
+{id:'s1271', yr:1271, y:'1271', t:'忽必烈建元', view:[96,50,135,17],
  extra:[{k:'冷知識',game:'trebuchet',t:'回回砲：靠配重甩出去的投石機',s:'蒙古圍攻襄陽將近 5 年（1268～1273）。後來從波斯（今天的伊朗一帶）來的工程師，做出用重物當配重、把大石頭甩出去的投石機，叫「回回砲」，城才被打下來。中國很早就有靠很多人拉繩子的投石機，回回砲厲害在用配重，石頭可以更重、丟得更遠。'},{k:'同時的世界',t:'神風：颱風擋住了蒙古（1274、1281年）',s:'忽必烈兩次派大軍渡海攻打日本，都沒有成功。1281 年那一次，艦隊被颱風打壞，日本人把這陣風叫做「神風」。至於 1274 年那一次有沒有颱風，學者還有不同的看法。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'元'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','helin','linan'], labels:['japan','annan'],
@@ -613,7 +636,7 @@ stations:[
   {n:'忽必烈', r:'決定', story:'我是鐵木真的孫子。我即位後建立元朝，把都城定在大都。南邊還有南宋，東邊還有高麗、日本，我要讓更多地方歸元朝管。', ask:'一個已經很大的國家，為什麼還想變得更大？'},
   {n:'南宋的守將', r:'對手', story:'北邊的蒙古建立了元朝，忽必烈的大軍正在往南打。我們還守得住嗎？', ask:'知道對手越來越強，你會怎麼準備？'}
  ]},
-{id:'s1279', y:'1279', t:'元滅南宋・四等人', view:[96,50,128,18],
+{id:'s1279', yr:1279, y:'1279', t:'元滅南宋・四等人', view:[96,50,128,18],
  extra:[{k:'冷知識',t:'崖山海戰（1279年）',s:'南宋最後一戰在崖山（今天廣東的海邊）。打輸之後，丞相陸秀夫背著才七、八歲的小皇帝跳海，南宋就此滅亡。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN','SONGS','DALI'],at:[104,44],n:'元'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','linan','helin'], labels:['japan','annan'],
@@ -631,7 +654,7 @@ stations:[
   {n:'忽必烈', r:'決定', story:'南宋滅了，整個中國都歸元朝管了。為了讓蒙古人的權力穩穩的，我把人民分成四個等級：蒙古人、色目人、漢人、南人。', ask:'用分等級的方法管理國家，你覺得會有什麼問題？'},
   {n:'北方的漢人農夫', r:'百姓', story:'我住在北方，以前歸金國管，現在被叫做「漢人」。地位比蒙古人、色目人低，很多事都被限制。', ask:'被分到第三等，你會怎麼想？'}
  ]},
-{id:'send', y:'14世紀中葉', t:'元朝滅亡', view:[96,50,128,18],
+{id:'send', yr:1368, y:'14世紀中葉', t:'元朝滅亡', view:[96,50,128,18],
  regions:[{p:'mongol',s:['MONGOL','JIN','SONGS','DALI'],at:[104,44],n:'元',faded:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu'], labels:['japan'],
   book:['元朝後期，政府的錢管得一團亂（**財政紊亂**），人民要繳的稅和要做的工很重（**賦役繁重**），又一直有天災（**連年災荒**）。','人民紛紛起來反抗（**民變紛起**），元朝最後在**14世紀中葉**滅亡。'],
@@ -654,28 +677,29 @@ trade:{
     {kind:'sea', card:'sea', pts:[[118.6,24.6],[116,22.4],[113.3,22.4],[111.2,19],[110,15],[108.8,10.5],[105.6,6.6],[104.3,1.3],[102.4,2.3],[99.6,4.2],[97,6.3],[90,6.4],[82.6,5.2],[77.2,7],[73,12.5],[66,18.5],[60.5,22.6],[57.4,25.2],[55,26.6],[51.5,28.2],[49.3,29.4]]},
     {kind:'sea', card:'sea', pts:[[66,18.5],[58,16],[52,13.2],[46.5,12.3],[43.2,13.4],[41,16.6],[38.8,21]]},
     {kind:'sea', card:'sea', pts:[[52,13.2],[52.6,10.4],[50.6,6],[47.6,2],[43.4,-1.4]]},
-    {kind:'land', card:'land', pts:[[116.4,39.9],[110.6,43.8],[102.8,47.2],[92,46],[81,44],[74.5,41.8],[67,39.6],[60,37.6],[52.5,36],[44.4,33.3]]},
-    {kind:'land', card:'land', pts:[[67,39.6],[61,42.5],[54,45.6],[47.6,46.6]]},
-    {kind:'land', card:'land', pts:[[116.4,39.9],[116.8,35.4],[118.4,32.4],[120.2,30.3],[119.4,27.4],[118.6,24.9]]}
+    {kind:'land', card:'land', from:1271, pts:[[116.4,39.9],[110.6,43.8],[102.8,47.2],[92,46],[81,44],[74.5,41.8],[67,39.6],[60,37.6],[52.5,36],[44.4,33.3]]},
+    {kind:'land', card:'land', from:1271, pts:[[67,39.6],[61,42.5],[54,45.6],[47.6,46.6]]},
+    {kind:'land', card:'land', from:1271, pts:[[116.4,39.9],[116.8,35.4],[118.4,32.4],[120.2,30.3],[119.4,27.4],[118.6,24.9]]}
   ],
+  /* from／to：這個地點從哪一年開始、到哪一年為止出現在商貿圖層（跟著時間軸）。沒寫就是整個宋元都有。 */
   markers:[
-    {n:'廣州・市舶司', at:[113.3,23.1], icon:'port', card:'guangzhou'},
-    {n:'泉州・市舶司', at:[118.6,24.9], icon:'mosque', card:'quanzhou'},
-    {n:'汴京・夜市', at:[114.3,34.8], icon:'market', card:'bianjing'},
-    {n:'景德鎮', at:[117.2,29.3], icon:'kiln', card:'jingdezhen'},
+    {n:'廣州・市舶司', from:971, at:[113.3,23.1], icon:'port', card:'guangzhou'},
+    {n:'泉州・市舶司', from:1087, at:[118.6,24.9], icon:'mosque', card:'quanzhou'},
+    {n:'汴京・夜市', from:960, to:1127, at:[114.3,34.8], icon:'market', card:'bianjing'},
+    {n:'景德鎮', from:1127, at:[117.2,29.3], icon:'kiln', card:'jingdezhen'},
     {n:'江南', at:[119.6,31.6], icon:'silk', card:'jiangnan'},
-    {n:'大都・紙幣', at:[116.4,39.9], icon:'note', card:'paper'},
-    {n:'驛站', at:[102.8,47.2], icon:'horse', card:'post'},
-    {n:'驛站', at:[81,44], icon:'horse', card:'post'},
-    {n:'驛站', at:[60,37.6], icon:'horse', card:'post'},
-    {n:'東非・宋瓷碎片', at:[41.5,1.5], icon:'shard', card:'sea'}
+    {n:'大都・紙幣', from:1271, at:[116.4,39.9], icon:'note', card:'paper'},
+    {n:'驛站', from:1271, at:[102.8,47.2], icon:'horse', card:'post'},
+    {n:'驛站', from:1271, at:[81,44], icon:'horse', card:'post'},
+    {n:'驛站', from:1271, at:[60,37.6], icon:'horse', card:'post'},
+    {n:'東非・宋瓷碎片', from:960, at:[41.5,1.5], icon:'shard', card:'sea'}
   ],
   seaLabels:[{n:'南海', at:[114,15]},{n:'印度洋', at:[74,4]}],
   cards:{
-    sea:{t:'海路貿易', tag:'宋元', body:['從唐中葉開始，**阿拉伯商人**主導從**印度洋、南海**到中國東南沿海的海上生意。','宋元時期**造船技術進步**、大量使用**指南針**，又在**廣州、泉州**設**市舶司**管理，海上貿易更熱鬧。','宋朝的瓷器賣到東北亞、東南亞，今天連**東非**都挖得到宋朝瓷器的碎片。'], like:'指南針像古代船上的 GPS：晚上、陰天也知道方向，船就敢開更遠。'},
+    sea:{t:'海路貿易', tag:'宋元', game:'voyage', body:['從唐中葉開始，**阿拉伯商人**主導從**印度洋、南海**到中國東南沿海的海上生意。','宋元時期**造船技術進步**、大量使用**指南針**，又在**廣州、泉州**設**市舶司**管理，海上貿易更熱鬧。','宋朝的瓷器賣到東北亞、東南亞，今天連**東非**都挖得到宋朝瓷器的碎片。'], like:'指南針像古代船上的 GPS：晚上、陰天也知道方向，船就敢開更遠。'},
     land:{t:'陸路貿易', tag:'宋・元', body:['**宋朝**：往西、往北的陸路被其他國家擋住，陸上生意**比較不發達**。','**元朝**：蒙古西征後，東西方的商路**重新打通**，生意變熱鬧。','元朝在各地廣設**驛站**，一路通到**西亞、歐洲**。'], like:'以前路上有好幾個不讓你過的關卡；蒙古把這些地方都變成同一個帝國，路就通了。'},
     guangzhou:{t:'廣州・市舶司', tag:'宋元', body:['宋元在**廣州、泉州**等地設**市舶司**，負責收稅和管理。','市舶司從**唐代**開始有：管理商船、檢查進港的貨物、收稅，很像今天的**海關**。','從唐代起，來中國住的阿拉伯商人叫**蕃客**，他們住在一起的地方叫**蕃坊**；廣州、泉州一帶也開始有**清真寺**。'], like:'市舶司就像今天機場、港口的海關：東西進來要檢查、要繳稅。'},
-    quanzhou:{t:'泉州・市舶司與清真寺', tag:'宋元', body:['**泉州**也設了**市舶司**（和廣州一樣）。','**泉州清真寺（清淨寺）**最早在**北宋**時蓋的。','宋元時期，很多信**伊斯蘭教**的商人在住的地方蓋清真寺，伊斯蘭教就傳開了。','他們懂**天文**和**藥物**，影響了後來中國的**曆法**和**醫學**；元朝還特別請**回回人**（信伊斯蘭教的人）觀察天文、推算曆法。'], like:'像今天外國人來台灣工作，住在同一區、開了自己的餐廳和教堂，也把他們的知識帶進來。'},
+    quanzhou:{t:'泉州・市舶司與清真寺', tag:'宋元', game:'voyage', body:['**泉州**也設了**市舶司**（和廣州一樣）。','**泉州清真寺（清淨寺）**最早在**北宋**時蓋的。','宋元時期，很多信**伊斯蘭教**的商人在住的地方蓋清真寺，伊斯蘭教就傳開了。','他們懂**天文**和**藥物**，影響了後來中國的**曆法**和**醫學**；元朝還特別請**回回人**（信伊斯蘭教的人）觀察天文、推算曆法。'], like:'像今天外國人來台灣工作，住在同一區、開了自己的餐廳和教堂，也把他們的知識帶進來。'},
     bianjing:{t:'汴京・坊市制度廢除', tag:'宋', body:['**唐代中期以前**，城市分成住人的**坊**和做生意的**市**；市有圍牆，只在固定時間開門。','宋朝生意越來越多，**坊市制度廢除**，在哪裡、幾點都能做生意，**夜市**很熱鬧。','北宋**張擇端**畫的**《清明上河圖》**，畫的就是汴京熱鬧的樣子。'], like:'以前像只有百貨公司營業時間才能買東西；坊市制度廢除後，就像到處都有夜市和便利商店。'},
     jingdezhen:{t:'景德鎮・製瓷業', tag:'南宋・元', body:['唐代以來，海外貿易越來越多，瓷器做得越來越多、也越來越好。','到**南宋和元代**，長江中下游的**景德鎮**變成**陶瓷業的中心**。','宋朝瓷器賣到東北亞、東南亞，**東非**也挖得到碎片。'], like:'景德鎮就像瓷器界的「科學園區」，最好的工廠都集中在這裡。'},
     jiangnan:{t:'江南開發・經濟重心南移', tag:'社會變遷', body:['**永嘉之禍**後，中原的人往南搬，**江南**（長江以南）開始開發。','唐代中晚期以後北方一直亂、南方比較安定，北方人繼續往南搬；到**11世紀末**，南方人口**超過**北方。','**經濟重心南移**：國家收的稅也大多靠南方。','南方的**絲織業**唐代開始興起；到**北宋**時，南方的絲織品已經比北方多。'], like:'像一個城市的熱鬧區從舊市區搬到新市區：人搬過去、店開過去，最後市政府的稅也大多從新市區來。',
@@ -909,18 +933,19 @@ Object.keys(D.places).forEach(id=>{const p=D.places[id];const po=p.p&&D.polities
 /* ---------- 商貿圖層 ---------- */
 const tradeG=el('g',{class:'trade off'},L.tradeL);
 const tradeMG=el('g',{class:'trade off'},L.tradeM);
+const tradeEls=[];/* [元素, from, to]：跟著時間軸顯示 */
 D.trade.routes.forEach(r=>{
-  const d=lineD(r.pts);
+  const d=lineD(r.pts);const rg=el('g',{class:'tr-item'},tradeG);tradeEls.push([rg,r.from,r.to]);
   const sea=r.kind==='sea';
-  el('path',{d,fill:'none',stroke:'#fff','stroke-width':sea?5:6,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round',opacity:.8},tradeG);
-  el('path',{class:reduce?'':'flow',d,fill:'none',stroke:sea?'#2f6f9f':'#a0522d','stroke-width':sea?2.6:3.4,'stroke-dasharray':sea?'2 7':'12 6','vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'},tradeG);
-  const hit=el('path',{d,fill:'none',stroke:'transparent','stroke-width':18,'vector-effect':'non-scaling-stroke',style:'cursor:pointer;pointer-events:stroke'},tradeG);
+  el('path',{d,fill:'none',stroke:'#fff','stroke-width':sea?5:6,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round',opacity:.8},rg);
+  el('path',{class:reduce?'':'flow',d,fill:'none',stroke:sea?'#2f6f9f':'#a0522d','stroke-width':sea?2.6:3.4,'stroke-dasharray':sea?'2 7':'12 6','vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'},rg);
+  const hit=el('path',{d,fill:'none',stroke:'transparent','stroke-width':18,'vector-effect':'non-scaling-stroke',style:'cursor:pointer;pointer-events:stroke'},rg);
   hit.addEventListener('click',()=>{if(!dragged)showTrade(r.card);});
 });
 D.trade.seaLabels.forEach(s=>{const g=txt(tradeG,s.at,s.n,{size:14,disp:true,c:'#2f6f9f'});g.style.pointerEvents='none';});
-txt(tradeG,[86,50.6],'— 陸路（元）',{size:12,c:'#a0522d'}).style.pointerEvents='none';
+{const g=txt(tradeG,[86,50.6],'— 陸路（元）',{size:12,c:'#a0522d'});g.style.pointerEvents='none';tradeEls.push([g,1271]);}
 txt(tradeG,[86,8.6],'··· 海路（宋元）',{size:12,c:'#2f6f9f'}).style.pointerEvents='none';
-D.trade.markers.forEach(m=>{const g=pin(tradeMG,m.at,m.n,m.icon,null,()=>showTrade(m.card),{cls:'mk',pillFill:'#fff8e6',pillStroke:'#c9a35a'});g.classList.remove('off');});
+D.trade.markers.forEach(m=>{const g=pin(tradeMG,m.at,m.n,m.icon,null,()=>showTrade(m.card),{cls:'mk',pillFill:'#fff8e6',pillStroke:'#c9a35a'});g.classList.remove('off');tradeEls.push([g,m.from,m.to]);});
 
 /* ---------- 箭頭 ---------- */
 function smooth(p){
@@ -1038,7 +1063,7 @@ function openSheet(title,html,sub){
   bd.querySelectorAll('[data-person]').forEach(b=>b.onclick=()=>showPerson(cur,+b.dataset.person));
   bd.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>showTrade(b.dataset.card));
   bd.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;showStation();});
-  bd.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>openGame());
+  bd.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>b.dataset.game==='voyage'?openVoyage():openGame());
 }
 const TABS=[['book','課本'],['like','打個比方'],['people','當時的人']];
 tabs.innerHTML=TABS.map(([k,n])=>'<button role="tab" data-t="'+k+'">'+n+'</button>').join('');
@@ -1075,7 +1100,7 @@ function showStation(){
   openSheet(st.y+'・'+st.t,h,false);
 }
 function tradeIntro(){
-  return '<div class="blk book"><span class="badge">商貿圖層</span><p>藍色點線是海路（宋元），咖啡色線是陸路（元）。點路線或地點看重點。</p><div class="extras">'+D.trade.extras.map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div></div>';
+  return '<div class="blk book"><span class="badge">商貿圖層</span><p>藍色點線是海路（宋元），咖啡色線是陸路（元）。點路線或地點看重點。</p><p>地點會<b>跟著時間軸</b>出現：換到後面的站，會看到更多。例如廣州市舶司 971 年、泉州市舶司 1087 年才設立，驛站和陸路是元朝的事。</p><div class="extras">'+D.trade.extras.map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div></div>';
 }
 function showPerson(si,pi){tab='people';personSel=pi;ensureOpen();showStation();}
 function showPolity(pid){
@@ -1093,6 +1118,7 @@ function showTrade(cid){
   if(c.body)h+=list(c.body);
   if(c.table)h+=tableH(c.table);
   if(c.bars)h+='<b style="font-size:13px">'+esc(c.bars.t)+'</b><div class="bars">'+c.bars.rows.map(r=>'<div class="r"><span>'+esc(r[0])+'</span><div class="b"><span class="n" style="width:'+r[1]+'%">北 '+r[1]+'</span><span class="s" style="width:'+r[2]+'%">南 '+r[2]+'</span></div></div>').join('')+'</div>';
+  if(c.game)h+='<button class="play" data-game="'+esc(c.game)+'">⛵ 試試看：當泉州海商，開船下南洋</button>';
   h+='</div>'+(c.like?likeH(c.like):'')+'<div class="extras">'+D.trade.extras.filter(x=>x.card!==cid).map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div>';
   ensureOpen();openSheet(c.t,h,true);
 }
@@ -1201,6 +1227,163 @@ $('game').addEventListener('click',e=>{if(e.target.id==='game')closeGame();});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('game').hidden)closeGame();});
 addEventListener('resize',()=>{if(!$('game').hidden){gSize();gDraw();}});
 
+/* ---------- 小遊戲：泉州海商下南洋 ----------
+   真實海岸線（NE_BASE.land）畫在 canvas 上，按住拖曳讓船朝手指方向開，碰到陸地會擋住。
+   關卡都對應有出處的史實：季風（九日山祈風石刻）、陰天看指南針（《萍洲可談》）、
+   南海的「長沙」「石塘」（《嶺外代答》）＋水密隔艙（泉州灣宋船）、目的地三佛齊（《諸蕃志》）。
+   網址加 #voyage 會直接打開。 */
+const V={cv:$('vCv'),raf:0};
+const VP={from:[118.6,24.85],to:[104.9,-2.6],reefs:[[112.2,16.4,'西沙一帶'],[114.6,10.2,'南沙一帶']],cloud:[112.6,14.2]};
+function vSize(){
+  const c=V.cv,w=c.clientWidth||600,h=Math.round(Math.min(Math.max(w*1.25,360),innerHeight*.66)),d=devicePixelRatio||1;
+  c.width=w*d;c.height=h*d;c.style.height=h+'px';V.w=w;V.h=h;V.d=d;
+  V.proj=d3.geoMercator().fitExtent([[6,6],[w-6,h-6]],{type:'Feature',geometry:{type:'MultiPoint',coordinates:[[98,27],[124,27],[98,-5],[124,-5]]}});
+  V.u=Math.hypot(...['x','y'].map((_,i)=>V.proj([118,20])[i]-V.proj([119,20])[i]));/* 1 經度幾個像素 */
+  /* 陸地遮罩：碰撞用 */
+  const m=document.createElement('canvas');m.width=w;m.height=h;const mc=m.getContext('2d');mc.fillStyle='#000';
+  d3.geoPath(V.proj,mc)(NE.land);mc.beginPath();d3.geoPath(V.proj,mc)(NE.land);mc.fill();V.mask=mc.getImageData(0,0,w,h).data;
+}
+const vLand=(x,y)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=V.w||y>=V.h)return true;return V.mask[(y*V.w+x)*4+3]>0;};
+const vXY=p=>V.proj(p);
+function vDraw(){
+  const c=V.cv.getContext('2d'),W=V.w,H=V.h,s=V.st;c.setTransform(V.d,0,0,V.d,0,0);
+  c.fillStyle='#cfe6e8';c.fillRect(0,0,W,H);
+  const path=d3.geoPath(V.proj,c);
+  c.beginPath();path(NE.land);c.fillStyle='#f3ead6';c.fill();c.strokeStyle='#7fa3a3';c.lineWidth=1;c.stroke();
+  /* 風向箭頭（會慢慢飄） */
+  if(s.wind[0]||s.wind[1]){const [wx,wy]=s.wind,t=performance.now()/1000;c.strokeStyle='rgba(47,111,159,.45)';c.lineWidth=1.6;
+    for(let gx=20;gx<W;gx+=46)for(let gy=20;gy<H;gy+=46){const o=((t*18)%46),x=gx+wx*o,y=gy+wy*o;if(vLand(x,y))continue;
+      c.beginPath();c.moveTo(x-wx*8,y-wy*8);c.lineTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4-wy*3),y+wy*8-(wy*4+wx*3));c.moveTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4+wy*3),y+wy*8-(wy*4-wx*3));c.stroke();}}
+  /* 礁石 */
+  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]),r=V.u*1.6;c.fillStyle='rgba(120,160,150,.25)';c.beginPath();c.arc(x,y,r,0,7);c.fill();
+    c.fillStyle='rgba(90,120,110,.6)';for(let k=0;k<9;k++){const a=k*2.4+i,rr=r*.75*((k*37)%10)/10;c.beginPath();c.arc(x+Math.cos(a)*rr,y+Math.sin(a)*rr,1.6,0,7);c.fill();}});
+  /* 地名 */
+  const lbl=(p,t,col,dy)=>{const [x,y]=vXY(p);c.font='bold 13px sans-serif';c.textAlign='center';c.lineWidth=4;c.strokeStyle='rgba(255,253,246,.92)';c.strokeText(t,x,y+(dy||0));c.fillStyle=col||'#2b2a26';c.fillText(t,x,y+(dy||0));};
+  lbl([116.5,26.3],'宋','#4f7a52');lbl([113.3,23.4],'廣州','#6f6a5e');lbl([108.6,14.2],'占城','#6f6a5e');lbl([114,14.8],'南海','#2f6f9f');
+  {const [x,y]=vXY(VP.from);c.fillStyle='#b5452f';c.beginPath();c.arc(x,y,4,0,7);c.fill();lbl(VP.from,'泉州','#b5452f',-10);}
+  lbl(VP.to,'三佛齊','#b5452f',-16);
+  {const [x,y]=vXY(s.to),p=1+.25*Math.sin(performance.now()/250);c.strokeStyle='#b5452f';c.lineWidth=2.5;c.beginPath();c.arc(x,y,10*p,0,7);c.stroke();}
+  /* 走過的路 */
+  if(s.trail.length>1){c.strokeStyle='rgba(181,69,47,.5)';c.lineWidth=2;c.setLineDash([4,4]);c.beginPath();s.trail.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();c.setLineDash([]);}
+  /* 船 */
+  c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#8a5a3c';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();
+  c.fillStyle='#fff8e6';c.strokeStyle='#c9a35a';c.lineWidth=1;c.beginPath();c.moveTo(1,-9);c.lineTo(5,0);c.lineTo(1,9);c.lineTo(-2,0);c.closePath();c.fill();c.stroke();c.restore();
+  /* 手指的目標點 */
+  if(s.tgt){c.strokeStyle='rgba(43,42,38,.4)';c.setLineDash([3,4]);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(s.tgt[0],s.tgt[1]);c.stroke();c.setLineDash([]);
+    c.strokeStyle='#2b2a26';c.lineWidth=1.5;c.beginPath();c.arc(s.tgt[0],s.tgt[1],6,0,7);c.moveTo(s.tgt[0]-3,s.tgt[1]);c.lineTo(s.tgt[0]+3,s.tgt[1]);c.moveTo(s.tgt[0],s.tgt[1]-3);c.lineTo(s.tgt[0],s.tgt[1]+3);c.stroke();}
+  /* 烏雲：在雲裡的時候整個畫面變暗，看不到目的地，只剩指南針 */
+  const [cx,cy]=vXY(VP.cloud),cr=V.u*3.2;
+  const g=c.createRadialGradient(cx,cy,cr*.2,cx,cy,cr);g.addColorStop(0,'rgba(90,96,104,.75)');g.addColorStop(1,'rgba(90,96,104,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,cr,0,7);c.fill();
+  /* 全暗：看不到海岸、目的地、走過的路，只看得到自己的船和指南針 */
+  if(s.inCloud){c.fillStyle='#24282e';c.fillRect(0,0,W,H);
+    c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#d8c7a6';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();c.restore();
+    /* 指南針：指著南方 */
+    const kx=46,ky=100;c.fillStyle='#fbf7ee';c.beginPath();c.arc(kx,ky,32,0,7);c.fill();c.strokeStyle='#9b8160';c.lineWidth=2;c.stroke();
+    c.fillStyle='#2b2a26';c.font='bold 11px sans-serif';c.textAlign='center';c.fillText('北',kx,ky-19);c.fillText('南',kx,ky+27);
+    c.fillStyle='#b5452f';c.beginPath();c.moveTo(kx,ky+18);c.lineTo(kx-5,ky);c.lineTo(kx+5,ky);c.fill();c.fillStyle='#6f7f86';c.beginPath();c.moveTo(kx,ky-14);c.lineTo(kx-5,ky);c.lineTo(kx+5,ky);c.fill();
+    c.fillStyle='#fbf7ee';c.font='12px sans-serif';c.fillText('指南針',kx,ky+48);}
+  /* 狀態列 */
+  c.textAlign='left';c.font='bold 12px sans-serif';c.fillStyle='rgba(251,247,238,.9)';c.fillRect(6,6,138,22);c.fillStyle='#2b2a26';
+  c.fillText((s.leg==='back'?'香料 ':'瓷器 ')+s.cargo*10+' 箱 '+'▮'.repeat(s.cargo/2)+'▯'.repeat(5-s.cargo/2),12,21);
+  if(s.dist){c.fillStyle='rgba(251,247,238,.9)';c.fillRect(6,30,138,20);c.fillStyle='#2b2a26';c.fillText('航行第 '+vDays()+' 天',12,44);}
+}
+function vPop(html,btns){const p=$('vPop');p.innerHTML=html+(btns&&btns.length?'<div class="vbtns">'+btns.map((b,i)=>'<button data-i="'+i+'"'+(b.alt?' class="alt"':'')+'>'+b.t+'</button>').join('')+'</div>':'');
+  p.querySelectorAll('button').forEach(el=>el.onclick=()=>btns[+el.dataset.i].f());}
+/* 從某個港口往外找最近的一片海當起點（港口的點常常在岸上） */
+function vSeaNear(ll){let [x,y]=vXY(ll);const sea=(px,py)=>[[0,0],[3,0],[-3,0],[0,3],[0,-3]].every(([dx,dy])=>!vLand(px+dx,py+dy));
+  for(let r=2;r<80;r+=2)for(let a=0;a<16;a++){const px=x+r*Math.cos(Math.PI/4+a*Math.PI/8),py=y+r*Math.sin(Math.PI/4+a*Math.PI/8);if(sea(px,py))return[px,py];}return[x,y];}
+const P=(t,html)=>(t?'<b class="vt">'+t+'</b>':'')+'<p style="margin:0">'+html+'</p>';
+const SRC=t=>'<small>出處：'+t+'</small>';
+function vStart(){
+  vSize();cancelAnimationFrame(V.raf);
+  V.st={hd:Math.PI*.75,tgt:null,trail:[],cargo:10,wind:[0,0],hit:{},seen:{},inCloud:false,done:false,paused:true,leg:'out',to:VP.to};
+  [V.st.x,V.st.y]=vSeaNear(VP.from);vMsg('');
+  vPop(P('你是南宋泉州的海商','你要開船往南到<b>三佛齊</b>（今天的蘇門答臘一帶）做生意。泉州市舶司的官員趙汝适寫的《諸蕃志》記載：從泉州出發，<b>冬天順風也要一個多月</b>才到。')+SRC('趙汝适《諸蕃志》（約 1225）三佛齊條：「冬月順風，月餘方至凌牙門」。'),
+    [{t:'開始準備',f:vPrep}]);
+  let t0=performance.now();const loop=now=>{vStep(Math.min(.05,(now-t0)/1000));t0=now;vDraw();V.raf=requestAnimationFrame(loop);};V.raf=requestAnimationFrame(loop);
+}
+const R2=Math.SQRT1_2;
+/* 出發前的準備：可以複選；沒選到（或選錯）的，下一頁說明會有什麼問題。每一項都有出處。 */
+const PREP=[
+  {k:'pass',t:'到市舶司申請「公憑」',need:true,why:P('沒有公憑，就是走私！','宋朝規定，海商出海前要先到<b>市舶司</b>登記人、船和貨物，領到出海的許可證「<b>公憑</b>」；市舶司也負責查禁走私。先去申請吧！')+SRC('北宋元祐年間的市舶法；市舶司發公憑、查禁走私。')},
+  {k:'goods',t:'裝滿要賣的瓷器',need:true,why:P('船上沒有貨，去了要賣什麼？','宋代商船大量載運瓷器出口。南宋沉船「<b>南海一號</b>」打撈上來，挖出十幾萬件瓷器。把貨裝上船吧！')+SRC('「南海一號」南宋沉船（1987 年發現，2007 年整艘打撈上岸）。')},
+  {k:'compass',t:'帶上指南針',need:true,why:P('沒帶指南針，陰天會迷路！','宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。海上一陰天就分不清方向，一定要帶。')+SRC('朱彧《萍洲可談》（1119）。')},
+  {k:'arms',t:'帶兵器防身',need:false,why:P('兵器不能帶！','照宋朝的規定，出海前要找<b>三位本地有家產的人</b>作保，保證貨物裡<b>沒有夾帶兵器</b>。兵器要留在岸上。')+SRC('北宋元祐年間的市舶法（商人出海要有三人擔保貨物不夾帶兵器）。')}
+];
+function vPrep(){const sel=new Set();
+  const draw=()=>{vPop(P('出發前，要準備什麼？','可以選好幾個，選好按「準備好了」。')+'<div class="vbtns">'+PREP.map(x=>'<button class="'+(sel.has(x.k)?'':'alt')+'" data-k="'+x.k+'" aria-pressed="'+sel.has(x.k)+'">'+(sel.has(x.k)?'☑ ':'☐ ')+x.t+'</button>').join('')+'</div>',[{t:'準備好了 →',f:()=>vPrepCheck(sel)}]);
+    $('vPop').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;sel.has(k)?sel.delete(k):sel.add(k);draw();});};
+  draw();}
+function vPrepCheck(sel){const probs=PREP.filter(x=>x.need!==sel.has(x.k));let i=0;
+  const next=()=>{if(i<probs.length){const x=probs[i++];vPop(x.why,[{t:x.need?'好，補上':'好，留在岸上',f:next}]);}
+    else vPop(P(probs.length?'都準備好了！':'全部答對，準備好了！','公憑、瓷器、指南針都上船了。')+P('','<b>接下來：選什麼時候出海？</b>'),[{t:'夏天出發',f:vSummer},{t:'冬天出發',f:vWinter}]);};
+  next();}
+/* 夏天：直接說明開不了，問要不要等冬天 */
+function vSummer(){const s=V.st;s.wind=[R2,-R2];
+  vPop(P('夏天開不了船！','夏天吹<b>西南季風</b>，風是往北吹的（看海上的藍色箭頭）。要往南去三佛齊，整趟都是逆風，船開不動。宋元時期，外國商船是<b>夏天乘西南風來、冬天趁東北風走</b>。泉州的官員每年在出海、回航的季節，還會到九日山「祈風」，祈求順風，石刻到今天還在。')+P('','要等到冬天再出發嗎？')+SRC('泉州九日山宋代祈風石刻（世界遺產「泉州：宋元中國的世界海洋商貿中心」的一部分）'),
+    [{t:'要，等冬天',f:vWinter},{t:'不要，回到開頭',alt:true,f:vStart}]);}
+function vWinter(){const s=V.st;s.wind=[-R2,R2];s.paused=false;vPop('');
+  vMsg('冬天吹東北季風，風往西南吹，剛好推著船往南走。點一下海圖，船就會開到那裡；也可以按住拖著走。目的地是紅色圓圈。');}
+function vMsg(t){$('vMsg').textContent=t;}
+/* 天數：照航行距離換算，讓一般的走法大約一個多月（《諸蕃志》：冬天順風月餘） */
+const vDays=()=>Math.max(1,Math.round(V.st.dist*1.2));
+function vStep(dt){
+  const s=V.st;if(!s||s.paused||s.done)return;
+  if(s.tgt){if(Math.hypot(s.tgt[0]-s.x,s.tgt[1]-s.y)<5&&!s.down){s.tgt=null;return;}
+    const want=Math.atan2(s.tgt[1]-s.y,s.tgt[0]-s.x);let d=want-s.hd;d=Math.atan2(Math.sin(d),Math.cos(d));s.hd+=Math.max(-3*dt,Math.min(3*dt,d));
+    const hx=Math.cos(s.hd),hy=Math.sin(s.hd),f=hx*s.wind[0]+hy*s.wind[1];
+    const sp=V.u*(f<-.3?.05:.28+.7*Math.max(0,f))*(s.inCloud?.6:1)*(V.fast?2.2:1);
+    const nx=s.x+hx*sp*dt,ny=s.y+hy*sp*dt;
+    /* 碰到陸地：往左右偏一點找得到海的方向，沿著海岸滑過去 */
+    let moved=false;for(const o of [0,.5,-.5,1,-1,1.5,-1.5]){const qx=s.x+Math.cos(s.hd+o)*sp*dt,qy=s.y+Math.sin(s.hd+o)*sp*dt;if(!vLand(qx,qy)){s.x=qx;s.y=qy;moved=true;if(o)s.hd+=o*.15;break;}}
+    /* 卡住太久（例如目標在陸地另一邊）：提醒繞路 */
+    const mv=Math.hypot(s.x-(s.lx||0),s.y-(s.ly||0));s.lx=s.x;s.ly=s.y;s.stuck=mv<sp*dt*.3?(s.stuck||0)+dt:0;
+    if(s.stuck>1.2){s.stuck=0;if(!s.down)s.tgt=null;vMsg('被陸地擋住了！點海上別的地方，繞過去。');}
+    if(!moved&&!s.down)s.tgt=null;
+    if(!s.trail.length||Math.hypot(s.x-s.trail[s.trail.length-1][0],s.y-s.trail[s.trail.length-1][1])>4)s.trail.push([s.x,s.y]);
+    s.dist=(s.dist||0)+(moved?sp*dt/V.u:0);}
+  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]);if(!s.hit[s.leg+i]&&Math.hypot(s.x-x,s.y-y)<V.u*1.4){s.hit[s.leg+i]=1;s.cargo=Math.max(4,s.cargo-2);vEvent('reef');}});
+  const [cx,cy]=vXY(VP.cloud),inC=Math.hypot(s.x-cx,s.y-cy)<V.u*2.6;
+  if(inC&&!s.inCloud&&!s.seen.cloud){s.seen.cloud=1;s.inCloud=true;vEvent('cloud');return;}s.inCloud=inC;
+  const [tx,ty]=vXY(s.to);if(Math.hypot(s.x-tx,s.y-ty)<Math.max(V.u*1.5,20)){s.done=true;vEvent(s.leg==='out'?'arrive':'home');}
+}
+function vEvent(k){
+  const s=V.st;s.paused=true;s.tgt=null;s.down=false;const go=()=>{s.paused=false;vPop('');};
+  const goods=s.leg==='out'?'瓷器':'香料';
+  if(k==='reef')vPop(P('撞到礁石了！','南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的'+goods+'泡水了（少了 20 箱）。')+SRC('周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。'),
+    [{t:'繼續開',f:go}]);
+  else if(k==='cloud')vPop(P('陰天，看不到太陽和星星！','宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。左邊的指南針紅色那頭指著<b>南方</b>。三佛齊在南邊偏西一點，照著指南針開出雲區吧！')+SRC('朱彧《萍洲可談》（1119），是目前所知最早記載航海用指南針的書之一。'),
+    [{t:'看指南針開船',f:go}]);
+  else if(k==='arrive'){const bad=(10-s.cargo)/2;
+    vPop(P('平安抵達三佛齊！',(bad?'撞到礁石 '+bad+' 次，泡水的瓷器賣不掉，':'一路順利，')+'出發時有 100 箱瓷器，剩下 <b>'+s.cargo*10+' 箱</b>可以賣，全部換成<b>香料</b>帶回去。你航行了大約 <b>'+vDays()+' 天</b>（遊戲換算）；《諸蕃志》記載冬天順風要一個多月。1974 年在泉州灣出土的宋代海船上，就挖到了香料。')+SRC('泉州灣宋代海船出土文物。'),
+      [{t:'這條路是什麼時候開始的？',f:vHistory}]);
+    vMsg('');}
+  else if(k==='home'){const bad=(10-s.cargo)/2;
+    vPop(P('平安回到泉州！','你一來一回，<b>冬天</b>乘東北季風往南、<b>夏天</b>乘西南季風往北，跟宋代的海商一樣，都要看季風的時間出海。'+(s.cargo<10?'這一趟撞到礁石，有些貨物泡水了，':'')+'船上的香料要先交給<b>市舶司</b>檢查、抽稅，才能拿去賣。')+SRC('九日山祈風石刻；宋代在泉州設市舶司管理商船、收稅。'),
+      [{t:'再開一次',f:vStart}]);vMsg('');}
+}
+/* 抵達後：這條海路的過去和未來 */
+function vHistory(){
+  vPop(P('這條海路，很早就有人走','<b>唐朝</b>的和尚<b>義淨</b>，671 年坐船去印度取經，路上就在<b>室利佛逝</b>停下來學習；一般認為，室利佛逝就是宋代書上的三佛齊。到了<b>北宋</b>，1087 年泉州設立<b>市舶司</b>，泉州越來越熱鬧，宋元時成為最繁榮的大港。')+
+    P('','這條路之後還會一直往西延伸：宋元的商船已經開進<b>印度洋</b>，連<b>東非</b>都挖到過宋代的瓷器碎片。到了<b>明朝</b>，<b>鄭和</b>在 1405～1433 年七次下西洋，到過印度的<b>古里</b>，最遠到了<b>非洲東岸</b>。')+
+    SRC('義淨的航程見《南海寄歸內法傳》（室利佛逝和三佛齊是不是同一個地方，學者還有不同看法）；泉州市舶司設於北宋元祐二年（1087）；鄭和下西洋（1405～1433）。'),
+    [{t:'想一想：什麼時候回泉州？',f:()=>vPop(P('','<b>想一想：什麼時候開船回泉州？</b>'),
+      [{t:'冬天',f:()=>vPop(P('冬天回不去！','冬天吹東北季風，風往南吹。要往北回泉州，整趟都是逆風。')+P('','要等到哪個季節？'),[{t:'夏天',f:vBack}])},{t:'夏天',f:vBack}])}]);}
+/* 回程：夏天，從三佛齊開回泉州 */
+function vBack(){const s=V.st;s.leg='back';s.to=V.proj.invert(vSeaNear(VP.from));s.dist=0;s.wind=[R2,-R2];s.done=false;s.cargo=10;s.trail=[];s.seen.cloud=1;
+  vPop(P('答對了！','夏天吹<b>西南季風</b>，風往北吹，剛好把船推回泉州。船上換成了香料，出發吧！'),[{t:'開船回泉州',f:()=>{s.paused=false;vPop('');vMsg('夏天吹西南季風，點一下海圖讓船開過去，目的地是泉州。');}}]);}
+function vPtr(e){const r=V.cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+/* 點一下：船開到那裡；按住拖：船跟著手指 */
+V.cv.addEventListener('pointerdown',e=>{if(!V.st||V.st.paused)return;V.cv.setPointerCapture(e.pointerId);V.st.tgt=vPtr(e);V.st.down=true;});
+V.cv.addEventListener('pointermove',e=>{if(V.st&&V.st.down&&!V.st.paused)V.st.tgt=vPtr(e);});
+const vUp=()=>{if(V.st)V.st.down=false;};V.cv.addEventListener('pointerup',vUp);V.cv.addEventListener('pointercancel',vUp);
+function openVoyage(){$('voy').hidden=false;vStart();}
+$('vFast').onclick=()=>{V.fast=!V.fast;$('vFast').setAttribute('aria-pressed',String(!!V.fast));$('vFast').textContent=V.fast?'⏩ 加速中':'⏩ 加速';};
+function closeVoyage(){cancelAnimationFrame(V.raf);$('voy').hidden=true;}
+$('vClose').onclick=closeVoyage;
+$('voy').addEventListener('click',e=>{if(e.target.id==='voy')closeVoyage();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('voy').hidden)closeVoyage();});
+
 /* ---------- 切換站 ---------- */
 const track=$('track');
 D.stations.forEach((st,i)=>{const b=document.createElement('button');b.className='stop';b.innerHTML='<span class="yr">'+esc(st.y)+'</span><span class="dot"></span><span class="nm">'+esc(st.t.split('・')[0])+'</span>';b.onclick=()=>go(i);track.appendChild(b);});
@@ -1219,13 +1402,14 @@ function apply(){
   arrowEls.forEach((arr,i)=>arr.forEach(g=>g.classList.toggle('off',i!==cur)));
   peopleEls.forEach((arr,i)=>arr.forEach(g=>g.classList.toggle('off',i!==cur)));
   [tradeG,tradeMG].forEach(g=>g.classList.toggle('off',!tradeOn));
+  const yr=st.yr;tradeEls.forEach(([e,f,t])=>e.classList.toggle('off',(f!=null&&yr<f)||(t!=null&&yr>=t)));
   [...track.children].forEach((b,i)=>b.setAttribute('aria-current',String(i===cur)));
   const b=track.children[cur];if(b){const tr=track.getBoundingClientRect(),br=b.getBoundingClientRect();track.scrollLeft=Math.max(0,track.scrollLeft+br.left-tr.left-(tr.width-br.width)/2);}
   $('prev').disabled=cur===0;$('next').disabled=cur===D.stations.length-1;
 }
 function go(i){const n=Math.max(0,Math.min(D.stations.length-1,i));if(n!==cur){personSel=-1;if(tab==='people'&&!(D.stations[n].people||[]).length)tab='book';}cur=n;userMoved=false;apply();showStation();flyTo(curView());try{history.replaceState(null,'','#'+D.stations[cur].id);}catch(e){}}
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
-document.addEventListener('keydown',e=>{if(!$('game').hidden||(e.target.closest&&e.target.closest('input,textarea')))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
+document.addEventListener('keydown',e=>{if(!$('game').hidden||!$('voy').hidden||(e.target.closest&&e.target.closest('input,textarea')))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
 $('lyPol').onclick=()=>{polOn=!polOn;$('lyPol').setAttribute('aria-pressed',String(polOn));apply();};
 $('lyTrade').onclick=()=>{tradeOn=!tradeOn;$('lyTrade').setAttribute('aria-pressed',String(tradeOn));apply();showStation();flyTo(curView());};
 
@@ -1236,9 +1420,10 @@ let rT;addEventListener('resize',()=>{layout();clearTimeout(rT);rT=setTimeout(()
 layout();
 const GAME_HASH='#trebuchet',GAME_ST=D.stations.findIndex(s=>(s.extra||[]).some(x=>x.game==='trebuchet'));
 const start=location.hash===GAME_HASH?GAME_ST:D.stations.findIndex(s=>'#'+s.id===location.hash);
-addEventListener('hashchange',()=>{if(location.hash===GAME_HASH){go(GAME_ST);openGame();return;}const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
+addEventListener('hashchange',()=>{if(location.hash==='#voyage'){openVoyage();return;}if(location.hash===GAME_HASH){go(GAME_ST);openGame();return;}const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
 cur=start<0?0:start;sheet.dataset.mode='half';apply();showStation();vb=camFor(curView());setVB();
 if(location.hash===GAME_HASH)openGame();
+if(location.hash==='#voyage')openVoyage();
 })();
 </script>
 </body></html>
