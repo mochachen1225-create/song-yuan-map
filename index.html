@@ -437,12 +437,13 @@ arrowKinds:{
 },
 
 /* ---------- 關鍵站 ----------
+   yr：這一站大約的年份（數字；商貿圖層用它決定哪些地點已經出現）
    view：這一站要看的範圍 [西經度, 北緯度, 東經度, 南緯度]
    regions：{p:政權, s:形狀(可多個), at:國名位置, n:地圖上的國名, faded:變淡}
    extra：課外補充 {k:類別, t:標題, s:內容, game:小遊戲}，顯示在「課本」頁籤，標明不用背
    people：情境想像（第一人稱），ask＝如果是你（不用作答） */
 stations:[
-{id:'s947', y:'947', t:'契丹建遼', view:[100,51,128,33],
+{id:'s947', yr:947, y:'947', t:'契丹建遼', view:[100,51,128,33],
  extra:[{k:'想一想',t:'為什麼燕雲十六州這麼重要？',s:'燕雲十六州靠著燕山、太行山，山裡有很多關口，再加上長城，本來是擋住北方騎兵的天然屏障。山的南邊，就是又平又大的華北平原。燕雲送出去以後，北方的騎兵一出山口就是大平原，黃河以北幾乎沒有山可以擋，可以一路往南打。石敬瑭為了自己當皇帝，等於把自家大門的鑰匙交給了別人。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading'], labels:['nuzhen','tubo','mongolp'],
@@ -457,7 +458,7 @@ stations:[
   {n:'契丹的首領', r:'決定', story:'唐朝滅亡以後，中原亂成一團。有個叫石敬瑭的人想當皇帝，來請我們出兵幫他，還答應事成後把燕雲十六州送給我們。這正是我們的機會：那裡能種糧，又是打仗的好位置。', ask:'別人送上門的好處，背後可能要付出什麼代價？'},
   {n:'中原的守將', r:'對手', story:'我們一直守著北邊的城。結果不是被打下來的，是上面的人為了自己當皇帝，把這些城割給了契丹。一紙約定，十六州就換了主人。', ask:'一個人為了自己的位子，把國家的土地送出去，你覺得怎麼樣？'}
  ]},
-{id:'s960', y:'960', t:'北宋建立', view:[97,48,128,20],
+{id:'s960', yr:960, y:'960', t:'北宋建立', view:[97,48,128,20],
  extra:[{k:'冷知識',t:'沒有山可以守，只好種樹',s:'北宋拿不回燕雲，北邊沒有大山可以擋，只好在河北的邊界種了一大片樹林，用來擋遼國的騎兵。後來宋要聯合金國打遼的時候，自己把這片樹林砍掉了。'},{k:'冷知識',t:'宋太宗想搶回燕雲（979年）',s:'宋太宗曾經帶兵北伐，想拿回燕雲十六州，結果在高梁河（今天的北京附近）被遼打得大敗。之後宋朝一直沒能拿回燕雲。石敬瑭送出去很容易，要拿回來卻很難。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,30],n:'北宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['bianjing','dading','hangzhou','guangzhou'], labels:['tubo','nuzhen','japan'],
@@ -472,7 +473,7 @@ stations:[
   {n:'宋太祖趙匡胤', r:'決定', story:'我建立了宋朝，定都汴京。我要讓讀書人來管理國家，這是我選的方向。可是北邊的燕雲十六州還在遼手上，以後要靠誰拿回來呢？', ask:'重視讀書人和重視軍隊，你覺得一個國家能兩個都顧到嗎？'},
   {n:'遼國的貴族', r:'對手', story:'南邊新建了一個宋朝，聽說他們最看重讀書人。只要燕雲十六州在我們手上，宋就很難打過來。', ask:'握著對方拿不回去的土地，有什麼好處？'}
  ]},
-{id:'schan', y:'真宗時', t:'澶淵之盟', view:[106,44,125,31],
+{id:'schan', yr:1005, y:'真宗時', t:'澶淵之盟', view:[106,44,125,31],
  extra:[{k:'數字',t:'歲幣到底有多少？',s:'一開始的約定是：宋每年給遼銀 10 萬兩、絹 20 萬匹。宋朝的一兩大約 40 公克，所以光是銀子，每年就大約 4 公噸。換來的是宋遼之間大約一百年的和平。想一想：用今天的銀價換算，數字看起來好像不大，但當時的銀子比現在珍貴得多，所以不能直接比。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,43.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['chanzhou','bianjing','dading'], labels:[],
@@ -489,7 +490,7 @@ stations:[
   {n:'宋真宗', r:'決定', story:'遼軍打到澶州，我親自帶兵上前線。可是朝廷算過，和遼一直打下去花的錢太多。每年付歲幣，換來邊境安穩，你說划不划算？', ask:'如果你是宋真宗，你會繼續打，還是付錢換和平？'},
   {n:'遼國的將領', r:'對手', story:'我們打到這裡，宋的皇帝親自出來了，再打下去我們也會有損失。每年拿銀子和絹，兩國還以兄弟相稱，這樣的條件不錯。', ask:'對遼來說，簽約比繼續打好在哪裡？'}
  ]},
-{id:'s1038', y:'1038', t:'西夏建國', view:[96,47,125,28],
+{id:'s1038', yr:1038, y:'1038', t:'西夏建國', view:[96,47,125,28],
  extra:[{k:'冷知識',t:'世界最早的紙幣之一：交子',s:'四川的商人先開始用紙做的「交子」代替鐵錢。1023 年，政府設立「交子務」，由官方來發行，這是世界上最早的官方紙幣之一。後來政府發得太多，交子就越來越不值錢。想一想：錢印太多，會發生什麼事？'}],
  regions:[{p:'liao',s:['LIAO'],at:[113,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,31],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['xingqing','bianjing','dading'], labels:['tubo','nuzhen'],
@@ -504,7 +505,7 @@ stations:[
   {n:'遼國的官員', r:'對手', story:'西邊的西夏、東北的女真，還有高麗，都來向我們稱臣納貢。現在遼是東亞的老大，大家都得看我們的臉色。', ask:'當老大的感覺很好，可是你覺得老大的位置能一直坐穩嗎？'},
   {n:'西北邊境的宋朝百姓', r:'百姓', story:'以前只怕北邊的遼，現在西邊也多了西夏。我們的村子在兩個國家中間，大家晚上都睡不太安穩。', ask:'住在兩國交界的地方，你最擔心什麼？'}
  ]},
-{id:'s1115', y:'1115', t:'金國建立', view:[104,52,138,30],
+{id:'s1115', yr:1115, y:'1115', t:'金國建立', view:[104,52,138,30],
  extra:[{k:'冷知識',t:'坐船去結盟：海上之盟',s:'遼擋在宋和金的中間，宋的使者只好坐船橫渡渤海去找金國，約好一起打遼：金打遼的中京，宋打燕京。因為是在海上往來談成的，所以叫「海上之盟」。'}],
  regions:[{p:'liao',s:['LIAO'],at:[110,46.5],n:'遼'},{p:'jin',s:['JINE'],at:[129.5,46],n:'金'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading','bianjing'], labels:['japan'],
@@ -520,7 +521,7 @@ stations:[
   {n:'女真的首領', r:'決定', story:'我們女真人一直要向遼稱臣納貢。現在我們夠強了，我決定建立金國，不再當遼的小弟，還要和遼一決高下。', ask:'如果你是首領，什麼時候才是「夠強、可以反抗」的時候？'},
   {n:'東北的女真百姓', r:'百姓', story:'以前每年都要準備東西送去遼國。聽說首領建了金國，以後不用再送了嗎？可是要打仗，家裡的年輕人都要上戰場。', ask:'不用再送禮了，可是要打仗，你覺得值得嗎？'}
  ]},
-{id:'s1125', y:'1125', t:'金宋滅遼', view:[100,52,136,30],
+{id:'s1125', yr:1125, y:'1125', t:'金宋滅遼', view:[100,52,136,30],
  regions:[{p:'jin',s:['JIN6'],at:[124,46.5],n:'金'},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading','bianjing'], labels:[],
  arrows:[{pts:[[126,45],[122.5,43],[120,41.9]], k:'atk', label:'金', la:[124.5,44.6]},{pts:[[115,37.2],[115.8,39],[117.6,40.5]], k:'atk', label:'宋', la:[114.4,38.6]}],
@@ -535,7 +536,7 @@ stations:[
   {n:'北宋朝廷的大臣', r:'決定', story:'金國派人來，說要一起打遼。大家討論：和金聯手，遼就會被打敗。只是，我們真的了解金國嗎？', ask:'和一個不熟的新朋友聯手，你會擔心什麼？'},
   {n:'金國的將領', r:'對手', story:'和宋一起打遼，我看得很清楚：宋軍打得很吃力，根本不怎麼樣。等遼滅了，下一個……', ask:'從這位將領的話，你猜下一步會發生什麼事？'}
  ]},
-{id:'s1127', y:'1127', t:'靖康之禍・宋室南遷', view:[103,44,125,25],
+{id:'s1127', yr:1127, y:'1127', t:'靖康之禍・宋室南遷', view:[103,44,125,25],
  regions:[{p:'jin',s:['JIN'],at:[113,38.5],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['bianjing2','linan','zhongdu'], labels:[],
  arrows:[{pts:[[116.4,39.6],[115.6,37.3],[114.6,35.3]], k:'atk', label:'金兵南下', la:[117.6,37.4]},{pts:[[114.6,34.2],[117,32.3],[119.6,30.8]], k:'move', label:'宋室南遷', la:[116.4,31.7]}],
@@ -551,7 +552,7 @@ stations:[
   {n:'金國的將領', r:'決定', story:'滅了遼以後，我們發現宋軍不難打。我下令南下，一路打到汴京。城門攻破了，宋朝的皇室都成了我們的俘虜。', ask:'打勝仗的一方，接下來最可能想要什麼？'},
   {n:'南遷的宋朝皇室', r:'決定', story:'汴京沒了，皇室的人被抓走了。剩下的我們只能往南走，到南方重新撐起宋朝。', ask:'首都被攻破了，如果是你，會放棄還是重新開始？'}
  ]},
-{id:'speace', y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
+{id:'speace', yr:1142, y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
  extra:[{k:'想一想',t:'要打，還是要和？兩邊都在吵',s:'不只宋朝在吵，金國也在吵。南宋朝廷分成「主戰派」（例如岳飛、韓世忠）和「主和派」（以秦檜為代表），宋高宗比較想議和。金國那邊，完顏昌（撻懶）曾經主張把河南的土地還給宋；完顏宗弼（兀朮）堅決反對，後來又出兵把河南拿了回來。最後兩國還是簽了和議，南北對峙。'},{k:'冷知識',t:'岳飛為什麼會死？',s:'1142 年初，宋高宗下令處死岳飛。據記載，金國將領完顏宗弼曾說「必殺飛，始可和」，意思是一定要殺了岳飛，才能講和。岳飛的死，和宋金和議脫不了關係。'}],
  regions:[{p:'jin',s:['JIN'],at:[115,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['linan','zhongdu','bianjing2','xingqing'], labels:['tubo','japan'],
@@ -568,7 +569,7 @@ stations:[
   {n:'岳飛', r:'決定', story:'靖康年間的恥辱，到現在還沒洗刷。我帶兵抗金，希望收復原來的土地。我把心裡的憤恨寫成了〈滿江紅〉。', ask:'一邊想打回北方，一邊想議和，如果你是皇帝，你會聽哪一邊？'},
   {n:'金國的將領', r:'對手', story:'我們一次又一次南下，可是宋軍在長江一帶擋得很緊，怎麼都過不去。再打下去也不划算，不如讓宋向我們稱臣、送貢品。', ask:'打不過去的時候，用談判拿到好處，算不算一種贏？'}
  ]},
-{id:'smongol', y:'13世紀初', t:'蒙古崛起・第一次西征', view:[46,56,120,28],
+{id:'smongol', yr:1206, y:'13世紀初', t:'蒙古崛起・第一次西征', view:[46,56,120,28],
  regions:[{p:'mongol',s:['MONGOL'],at:[101,46],n:'蒙古'},{p:'jin',s:['JIN'],at:[116,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['helin','yemili','samarkand'], labels:[],
  arrows:[{pts:[[102.8,47.2],[93,47.3],[83.6,46.5],[74,42],[67,39.6],[58,37.8],[51,38.5],[47.5,43],[50,47.5]], k:'w1', label:'第一次西征（1218～1223）', la:[60,45]}],
@@ -583,7 +584,7 @@ stations:[
   {n:'鐵木真（成吉思汗）', r:'決定', story:'草原上的部族以前各打各的。我把大家統一起來，建立蒙古國，各部首領尊稱我為「成吉思汗」。現在我們的力量集中了，要往西走得更遠。', ask:'一群人變成一個團隊之後，力量為什麼會變大？'},
   {n:'西夏的百姓', r:'對手', story:'北方新出現的蒙古越來越強，大軍朝我們打過來了。這次，我們的國家撐不住了。', ask:'旁邊突然出現一個很強的國家，小國會怎麼樣？'}
  ]},
-{id:'s1234', y:'1234', t:'蒙古與南宋滅金', view:[96,51,128,22],
+{id:'s1234', yr:1234, y:'1234', t:'蒙古與南宋滅金', view:[96,51,128,22],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'蒙古'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['helin','linan','bianjing2'], labels:['japan','tubo'],
  arrows:[{pts:[[110,42.5],[112.2,38.5],[113.6,35.6]], k:'atk', label:'蒙古', la:[109.6,39.6]},{pts:[[113.2,30.5],[113.6,32.6],[114,34.2]], k:'atk', label:'南宋', la:[111.6,31.6]}],
@@ -599,7 +600,7 @@ stations:[
   {n:'蒙古的將領', r:'決定', story:'和南宋一起打金，金很快就倒了。現在黃河流域都歸我們管，南邊就是南宋。', ask:'從他的話，你猜蒙古下一個目標是誰？'},
   {n:'金國的士兵', r:'對手', story:'北邊是蒙古，南邊是南宋，兩邊一起打過來。我們被夾在中間，撐不下去了。', ask:'被兩邊夾攻的時候，還有什麼辦法？'}
  ]},
-{id:'swest', y:'1235～1260', t:'三次西征・四大汗國', view:[26,59,96,27],
+{id:'swest', yr:1235, y:'1235～1260', t:'三次西征・四大汗國', view:[26,59,96,27],
  extra:[{k:'同時的世界',t:'蒙古打到歐洲（1241年）',s:'第二次西征時，蒙古軍在波蘭的列格尼卡、匈牙利的莫希，接連打敗歐洲的騎士。同一年年底，大汗窩闊臺過世，蒙古軍隔年就撤回去了。一般認為，這是歐洲沒有被繼續往西打的原因之一。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'蒙古'},{p:'kipchak',s:['KIPCHAK'],at:[46,54.5],n:'欽察汗國',small:1},{p:'ogedei',s:['OGEDEI'],at:[81,49.5],n:'窩闊臺汗國',small:1},{p:'chagatai',s:['CHAGATAI'],at:[71,42.5],n:'察合臺汗國',small:1},{p:'ilkhan',s:['ILKHAN'],at:[55,32],n:'伊兒汗國',small:1},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1}],
  places:['helin','yemili','samarkand','sarai','baoda'], labels:['europe','india'],
@@ -619,7 +620,7 @@ stations:[
   {n:'成吉思汗的繼位者', r:'決定', story:'祖先開始的西征，我們要繼續。一次又一次往西，打下的地方就建立汗國。', ask:'一直往外打，對蒙古有什麼好處？可能又有什麼壞處？'},
   {n:'歐洲城市的居民', r:'百姓', story:'從東方來的騎兵到了我們這裡。他們說的話、穿的衣服，都和我們完全不一樣。', ask:'第一次遇到完全不認識的民族，你會害怕還是好奇？'}
  ]},
-{id:'s1271', y:'1271', t:'忽必烈建元', view:[96,50,135,17],
+{id:'s1271', yr:1271, y:'1271', t:'忽必烈建元', view:[96,50,135,17],
  extra:[{k:'冷知識',game:'trebuchet',t:'回回砲：靠配重甩出去的投石機',s:'蒙古圍攻襄陽將近 5 年（1268～1273）。後來從波斯（今天的伊朗一帶）來的工程師，做出用重物當配重、把大石頭甩出去的投石機，叫「回回砲」，城才被打下來。中國很早就有靠很多人拉繩子的投石機，回回砲厲害在用配重，石頭可以更重、丟得更遠。'},{k:'同時的世界',t:'神風：颱風擋住了蒙古（1274、1281年）',s:'忽必烈兩次派大軍渡海攻打日本，都沒有成功。1281 年那一次，艦隊被颱風打壞，日本人把這陣風叫做「神風」。至於 1274 年那一次有沒有颱風，學者還有不同的看法。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'元'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','helin','linan'], labels:['japan','annan'],
@@ -635,7 +636,7 @@ stations:[
   {n:'忽必烈', r:'決定', story:'我是鐵木真的孫子。我即位後建立元朝，把都城定在大都。南邊還有南宋，東邊還有高麗、日本，我要讓更多地方歸元朝管。', ask:'一個已經很大的國家，為什麼還想變得更大？'},
   {n:'南宋的守將', r:'對手', story:'北邊的蒙古建立了元朝，忽必烈的大軍正在往南打。我們還守得住嗎？', ask:'知道對手越來越強，你會怎麼準備？'}
  ]},
-{id:'s1279', y:'1279', t:'元滅南宋・四等人', view:[96,50,128,18],
+{id:'s1279', yr:1279, y:'1279', t:'元滅南宋・四等人', view:[96,50,128,18],
  extra:[{k:'冷知識',t:'崖山海戰（1279年）',s:'南宋最後一戰在崖山（今天廣東的海邊）。打輸之後，丞相陸秀夫背著才七、八歲的小皇帝跳海，南宋就此滅亡。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN','SONGS','DALI'],at:[104,44],n:'元'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','linan','helin'], labels:['japan','annan'],
@@ -653,7 +654,7 @@ stations:[
   {n:'忽必烈', r:'決定', story:'南宋滅了，整個中國都歸元朝管了。為了讓蒙古人的權力穩穩的，我把人民分成四個等級：蒙古人、色目人、漢人、南人。', ask:'用分等級的方法管理國家，你覺得會有什麼問題？'},
   {n:'北方的漢人農夫', r:'百姓', story:'我住在北方，以前歸金國管，現在被叫做「漢人」。地位比蒙古人、色目人低，很多事都被限制。', ask:'被分到第三等，你會怎麼想？'}
  ]},
-{id:'send', y:'14世紀中葉', t:'元朝滅亡', view:[96,50,128,18],
+{id:'send', yr:1368, y:'14世紀中葉', t:'元朝滅亡', view:[96,50,128,18],
  regions:[{p:'mongol',s:['MONGOL','JIN','SONGS','DALI'],at:[104,44],n:'元',faded:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu'], labels:['japan'],
   book:['元朝後期，政府的錢管得一團亂（**財政紊亂**），人民要繳的稅和要做的工很重（**賦役繁重**），又一直有天災（**連年災荒**）。','人民紛紛起來反抗（**民變紛起**），元朝最後在**14世紀中葉**滅亡。'],
@@ -676,21 +677,22 @@ trade:{
     {kind:'sea', card:'sea', pts:[[118.6,24.6],[116,22.4],[113.3,22.4],[111.2,19],[110,15],[108.8,10.5],[105.6,6.6],[104.3,1.3],[102.4,2.3],[99.6,4.2],[97,6.3],[90,6.4],[82.6,5.2],[77.2,7],[73,12.5],[66,18.5],[60.5,22.6],[57.4,25.2],[55,26.6],[51.5,28.2],[49.3,29.4]]},
     {kind:'sea', card:'sea', pts:[[66,18.5],[58,16],[52,13.2],[46.5,12.3],[43.2,13.4],[41,16.6],[38.8,21]]},
     {kind:'sea', card:'sea', pts:[[52,13.2],[52.6,10.4],[50.6,6],[47.6,2],[43.4,-1.4]]},
-    {kind:'land', card:'land', pts:[[116.4,39.9],[110.6,43.8],[102.8,47.2],[92,46],[81,44],[74.5,41.8],[67,39.6],[60,37.6],[52.5,36],[44.4,33.3]]},
-    {kind:'land', card:'land', pts:[[67,39.6],[61,42.5],[54,45.6],[47.6,46.6]]},
-    {kind:'land', card:'land', pts:[[116.4,39.9],[116.8,35.4],[118.4,32.4],[120.2,30.3],[119.4,27.4],[118.6,24.9]]}
+    {kind:'land', card:'land', from:1271, pts:[[116.4,39.9],[110.6,43.8],[102.8,47.2],[92,46],[81,44],[74.5,41.8],[67,39.6],[60,37.6],[52.5,36],[44.4,33.3]]},
+    {kind:'land', card:'land', from:1271, pts:[[67,39.6],[61,42.5],[54,45.6],[47.6,46.6]]},
+    {kind:'land', card:'land', from:1271, pts:[[116.4,39.9],[116.8,35.4],[118.4,32.4],[120.2,30.3],[119.4,27.4],[118.6,24.9]]}
   ],
+  /* from／to：這個地點從哪一年開始、到哪一年為止出現在商貿圖層（跟著時間軸）。沒寫就是整個宋元都有。 */
   markers:[
-    {n:'廣州・市舶司', at:[113.3,23.1], icon:'port', card:'guangzhou'},
-    {n:'泉州・市舶司', at:[118.6,24.9], icon:'mosque', card:'quanzhou'},
-    {n:'汴京・夜市', at:[114.3,34.8], icon:'market', card:'bianjing'},
-    {n:'景德鎮', at:[117.2,29.3], icon:'kiln', card:'jingdezhen'},
+    {n:'廣州・市舶司', from:971, at:[113.3,23.1], icon:'port', card:'guangzhou'},
+    {n:'泉州・市舶司', from:1087, at:[118.6,24.9], icon:'mosque', card:'quanzhou'},
+    {n:'汴京・夜市', from:960, to:1127, at:[114.3,34.8], icon:'market', card:'bianjing'},
+    {n:'景德鎮', from:1127, at:[117.2,29.3], icon:'kiln', card:'jingdezhen'},
     {n:'江南', at:[119.6,31.6], icon:'silk', card:'jiangnan'},
-    {n:'大都・紙幣', at:[116.4,39.9], icon:'note', card:'paper'},
-    {n:'驛站', at:[102.8,47.2], icon:'horse', card:'post'},
-    {n:'驛站', at:[81,44], icon:'horse', card:'post'},
-    {n:'驛站', at:[60,37.6], icon:'horse', card:'post'},
-    {n:'東非・宋瓷碎片', at:[41.5,1.5], icon:'shard', card:'sea'}
+    {n:'大都・紙幣', from:1271, at:[116.4,39.9], icon:'note', card:'paper'},
+    {n:'驛站', from:1271, at:[102.8,47.2], icon:'horse', card:'post'},
+    {n:'驛站', from:1271, at:[81,44], icon:'horse', card:'post'},
+    {n:'驛站', from:1271, at:[60,37.6], icon:'horse', card:'post'},
+    {n:'東非・宋瓷碎片', from:960, at:[41.5,1.5], icon:'shard', card:'sea'}
   ],
   seaLabels:[{n:'南海', at:[114,15]},{n:'印度洋', at:[74,4]}],
   cards:{
@@ -931,18 +933,19 @@ Object.keys(D.places).forEach(id=>{const p=D.places[id];const po=p.p&&D.polities
 /* ---------- 商貿圖層 ---------- */
 const tradeG=el('g',{class:'trade off'},L.tradeL);
 const tradeMG=el('g',{class:'trade off'},L.tradeM);
+const tradeEls=[];/* [元素, from, to]：跟著時間軸顯示 */
 D.trade.routes.forEach(r=>{
-  const d=lineD(r.pts);
+  const d=lineD(r.pts);const rg=el('g',{class:'tr-item'},tradeG);tradeEls.push([rg,r.from,r.to]);
   const sea=r.kind==='sea';
-  el('path',{d,fill:'none',stroke:'#fff','stroke-width':sea?5:6,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round',opacity:.8},tradeG);
-  el('path',{class:reduce?'':'flow',d,fill:'none',stroke:sea?'#2f6f9f':'#a0522d','stroke-width':sea?2.6:3.4,'stroke-dasharray':sea?'2 7':'12 6','vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'},tradeG);
-  const hit=el('path',{d,fill:'none',stroke:'transparent','stroke-width':18,'vector-effect':'non-scaling-stroke',style:'cursor:pointer;pointer-events:stroke'},tradeG);
+  el('path',{d,fill:'none',stroke:'#fff','stroke-width':sea?5:6,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round',opacity:.8},rg);
+  el('path',{class:reduce?'':'flow',d,fill:'none',stroke:sea?'#2f6f9f':'#a0522d','stroke-width':sea?2.6:3.4,'stroke-dasharray':sea?'2 7':'12 6','vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'},rg);
+  const hit=el('path',{d,fill:'none',stroke:'transparent','stroke-width':18,'vector-effect':'non-scaling-stroke',style:'cursor:pointer;pointer-events:stroke'},rg);
   hit.addEventListener('click',()=>{if(!dragged)showTrade(r.card);});
 });
 D.trade.seaLabels.forEach(s=>{const g=txt(tradeG,s.at,s.n,{size:14,disp:true,c:'#2f6f9f'});g.style.pointerEvents='none';});
-txt(tradeG,[86,50.6],'— 陸路（元）',{size:12,c:'#a0522d'}).style.pointerEvents='none';
+{const g=txt(tradeG,[86,50.6],'— 陸路（元）',{size:12,c:'#a0522d'});g.style.pointerEvents='none';tradeEls.push([g,1271]);}
 txt(tradeG,[86,8.6],'··· 海路（宋元）',{size:12,c:'#2f6f9f'}).style.pointerEvents='none';
-D.trade.markers.forEach(m=>{const g=pin(tradeMG,m.at,m.n,m.icon,null,()=>showTrade(m.card),{cls:'mk',pillFill:'#fff8e6',pillStroke:'#c9a35a'});g.classList.remove('off');});
+D.trade.markers.forEach(m=>{const g=pin(tradeMG,m.at,m.n,m.icon,null,()=>showTrade(m.card),{cls:'mk',pillFill:'#fff8e6',pillStroke:'#c9a35a'});g.classList.remove('off');tradeEls.push([g,m.from,m.to]);});
 
 /* ---------- 箭頭 ---------- */
 function smooth(p){
@@ -1097,7 +1100,7 @@ function showStation(){
   openSheet(st.y+'・'+st.t,h,false);
 }
 function tradeIntro(){
-  return '<div class="blk book"><span class="badge">商貿圖層</span><p>藍色點線是海路（宋元），咖啡色線是陸路（元）。點路線或地點看重點。</p><div class="extras">'+D.trade.extras.map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div></div>';
+  return '<div class="blk book"><span class="badge">商貿圖層</span><p>藍色點線是海路（宋元），咖啡色線是陸路（元）。點路線或地點看重點。</p><p>地點會<b>跟著時間軸</b>出現：換到後面的站，會看到更多。例如廣州市舶司 971 年、泉州市舶司 1087 年才設立，驛站和陸路是元朝的事。</p><div class="extras">'+D.trade.extras.map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div></div>';
 }
 function showPerson(si,pi){tab='people';personSel=pi;ensureOpen();showStation();}
 function showPolity(pid){
@@ -1399,6 +1402,7 @@ function apply(){
   arrowEls.forEach((arr,i)=>arr.forEach(g=>g.classList.toggle('off',i!==cur)));
   peopleEls.forEach((arr,i)=>arr.forEach(g=>g.classList.toggle('off',i!==cur)));
   [tradeG,tradeMG].forEach(g=>g.classList.toggle('off',!tradeOn));
+  const yr=st.yr;tradeEls.forEach(([e,f,t])=>e.classList.toggle('off',(f!=null&&yr<f)||(t!=null&&yr>=t)));
   [...track.children].forEach((b,i)=>b.setAttribute('aria-current',String(i===cur)));
   const b=track.children[cur];if(b){const tr=track.getBoundingClientRect(),br=b.getBoundingClientRect();track.scrollLeft=Math.max(0,track.scrollLeft+br.left-tr.left-(tr.width-br.width)/2);}
   $('prev').disabled=cur===0;$('next').disabled=cur===D.stations.length-1;
