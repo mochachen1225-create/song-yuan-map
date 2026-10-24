@@ -1281,7 +1281,7 @@ function vDraw(){
     c.fillStyle='#fbf7ee';c.font='12px sans-serif';c.fillText('指南針',kx,ky+48);}
   /* 狀態列 */
   c.textAlign='left';c.font='bold 12px sans-serif';c.fillStyle='rgba(251,247,238,.9)';c.fillRect(6,6,138,22);c.fillStyle='#2b2a26';
-  c.fillText('貨物 '+'▮'.repeat(s.cargo)+'▯'.repeat(10-s.cargo),12,21);
+  c.fillText((s.leg==='back'?'香料 ':'瓷器 ')+s.cargo*10+' 箱 '+'▮'.repeat(s.cargo/2)+'▯'.repeat(5-s.cargo/2),12,21);
   if(s.dist){c.fillStyle='rgba(251,247,238,.9)';c.fillRect(6,30,138,20);c.fillStyle='#2b2a26';c.fillText('航行第 '+vDays()+' 天',12,44);}
 }
 function vPop(html,btns){const p=$('vPop');p.innerHTML=html+(btns&&btns.length?'<div class="vbtns">'+btns.map((b,i)=>'<button data-i="'+i+'"'+(b.alt?' class="alt"':'')+'>'+b.t+'</button>').join('')+'</div>':'');
@@ -1347,12 +1347,12 @@ function vStep(dt){
 function vEvent(k){
   const s=V.st;s.paused=true;s.tgt=null;s.down=false;const go=()=>{s.paused=false;vPop('');};
   const goods=s.leg==='out'?'瓷器':'香料';
-  if(k==='reef')vPop(P('撞到礁石了！','南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的'+goods+'泡水了。')+SRC('周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。'),
+  if(k==='reef')vPop(P('撞到礁石了！','南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的'+goods+'泡水了（少了 20 箱）。')+SRC('周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。'),
     [{t:'繼續開',f:go}]);
   else if(k==='cloud')vPop(P('陰天，看不到太陽和星星！','宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。左邊的指南針紅色那頭指著<b>南方</b>。三佛齊在南邊偏西一點，照著指南針開出雲區吧！')+SRC('朱彧《萍洲可談》（1119），是目前所知最早記載航海用指南針的書之一。'),
     [{t:'看指南針開船',f:go}]);
   else if(k==='arrive'){const bad=(10-s.cargo)/2;
-    vPop(P('平安抵達三佛齊！',(bad?'撞到礁石 '+bad+' 次，泡水的瓷器賣不掉，':'一路順利，')+'剩下 <b>'+s.cargo+' 成</b>的瓷器賣掉，換成<b>香料</b>。你航行了大約 <b>'+vDays()+' 天</b>（遊戲換算）；《諸蕃志》記載冬天順風要一個多月。1974 年在泉州灣出土的宋代海船上，就挖到了香料。')+SRC('泉州灣宋代海船出土文物。'),
+    vPop(P('平安抵達三佛齊！',(bad?'撞到礁石 '+bad+' 次，泡水的瓷器賣不掉，':'一路順利，')+'出發時有 100 箱瓷器，剩下 <b>'+s.cargo*10+' 箱</b>可以賣，全部換成<b>香料</b>帶回去。你航行了大約 <b>'+vDays()+' 天</b>（遊戲換算）；《諸蕃志》記載冬天順風要一個多月。1974 年在泉州灣出土的宋代海船上，就挖到了香料。')+SRC('泉州灣宋代海船出土文物。'),
       [{t:'這條路是什麼時候開始的？',f:vHistory}]);
     vMsg('');}
   else if(k==='home'){const bad=(10-s.cargo)/2;
