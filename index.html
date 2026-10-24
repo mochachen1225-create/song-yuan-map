@@ -139,6 +139,17 @@ button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--seal);outl
 .gfire:disabled{opacity:.5;cursor:default}
 .gmsg{margin:0;font-size:15.5px;line-height:1.6;min-height:3.2em}
 .gnote{margin:0;font-size:11.5px;color:var(--muted)}
+/* 開船小遊戲 */
+.vwrap{position:relative}
+#vCv{width:100%;display:block;border-radius:12px;background:#cfe6e8;touch-action:none;cursor:crosshair}
+.vpop{position:absolute;left:8px;right:8px;bottom:8px;background:rgba(251,247,238,.97);border-radius:14px;padding:12px 14px;box-shadow:0 4px 0 rgba(0,0,0,.15);display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.65}
+.vpop:empty{display:none}
+.vpop b.vt{font-family:var(--f-disp);font-size:17px}
+.vpop small{color:var(--muted);font-size:12px;line-height:1.5}
+.vpop .vbtns{display:flex;gap:8px;flex-wrap:wrap}
+.vpop .vbtns button{border:0;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:700;cursor:pointer;background:var(--ink);color:var(--paper)}
+.vpop .vbtns button.alt{background:var(--paper2);color:var(--ink)}
+
 
 .blk.like{background:#eaf6ee;border:1.5px solid #a9d3b5}
 .blk.like .badge{background:#2f7a4c;color:#fff;align-self:flex-start}
@@ -227,6 +238,15 @@ table.t th{background:var(--paper2);font-weight:700;white-space:nowrap}
   <div class="track" id="track"></div>
   <button class="nav" id="next" aria-label="下一站">›</button>
 </nav>
+<div class="game" id="voy" role="dialog" aria-modal="true" aria-labelledby="vTtl" hidden>
+  <div class="gbox">
+    <div class="ghd"><b id="vTtl">泉州海商下南洋</b><button class="gx" id="vClose" aria-label="關閉">✕</button></div>
+    <div class="vwrap"><canvas id="vCv" aria-label="從泉州到三佛齊的海圖"></canvas>
+      <div class="vpop" id="vPop"></div></div>
+    <p class="gmsg" id="vMsg" aria-live="polite"></p>
+    <p class="gnote">海圖是真實的海岸線；風、雲、礁石的位置和船速是為了遊戲簡化過的。每一關的說明都有出處。</p>
+  </div>
+</div>
 <div class="game" id="game" role="dialog" aria-modal="true" aria-labelledby="gTtl" hidden>
   <div class="gbox">
     <div class="ghd"><b id="gTtl">投石機打襄陽</b><button class="gx" id="gClose" aria-label="關閉">✕</button></div>
@@ -672,10 +692,10 @@ trade:{
   ],
   seaLabels:[{n:'南海', at:[114,15]},{n:'印度洋', at:[74,4]}],
   cards:{
-    sea:{t:'海路貿易', tag:'宋元', body:['從唐中葉開始，**阿拉伯商人**主導從**印度洋、南海**到中國東南沿海的海上生意。','宋元時期**造船技術進步**、大量使用**指南針**，又在**廣州、泉州**設**市舶司**管理，海上貿易更熱鬧。','宋朝的瓷器賣到東北亞、東南亞，今天連**東非**都挖得到宋朝瓷器的碎片。'], like:'指南針像古代船上的 GPS：晚上、陰天也知道方向，船就敢開更遠。'},
+    sea:{t:'海路貿易', tag:'宋元', game:'voyage', body:['從唐中葉開始，**阿拉伯商人**主導從**印度洋、南海**到中國東南沿海的海上生意。','宋元時期**造船技術進步**、大量使用**指南針**，又在**廣州、泉州**設**市舶司**管理，海上貿易更熱鬧。','宋朝的瓷器賣到東北亞、東南亞，今天連**東非**都挖得到宋朝瓷器的碎片。'], like:'指南針像古代船上的 GPS：晚上、陰天也知道方向，船就敢開更遠。'},
     land:{t:'陸路貿易', tag:'宋・元', body:['**宋朝**：往西、往北的陸路被其他國家擋住，陸上生意**比較不發達**。','**元朝**：蒙古西征後，東西方的商路**重新打通**，生意變熱鬧。','元朝在各地廣設**驛站**，一路通到**西亞、歐洲**。'], like:'以前路上有好幾個不讓你過的關卡；蒙古把這些地方都變成同一個帝國，路就通了。'},
     guangzhou:{t:'廣州・市舶司', tag:'宋元', body:['宋元在**廣州、泉州**等地設**市舶司**，負責收稅和管理。','市舶司從**唐代**開始有：管理商船、檢查進港的貨物、收稅，很像今天的**海關**。','從唐代起，來中國住的阿拉伯商人叫**蕃客**，他們住在一起的地方叫**蕃坊**；廣州、泉州一帶也開始有**清真寺**。'], like:'市舶司就像今天機場、港口的海關：東西進來要檢查、要繳稅。'},
-    quanzhou:{t:'泉州・市舶司與清真寺', tag:'宋元', body:['**泉州**也設了**市舶司**（和廣州一樣）。','**泉州清真寺（清淨寺）**最早在**北宋**時蓋的。','宋元時期，很多信**伊斯蘭教**的商人在住的地方蓋清真寺，伊斯蘭教就傳開了。','他們懂**天文**和**藥物**，影響了後來中國的**曆法**和**醫學**；元朝還特別請**回回人**（信伊斯蘭教的人）觀察天文、推算曆法。'], like:'像今天外國人來台灣工作，住在同一區、開了自己的餐廳和教堂，也把他們的知識帶進來。'},
+    quanzhou:{t:'泉州・市舶司與清真寺', tag:'宋元', game:'voyage', body:['**泉州**也設了**市舶司**（和廣州一樣）。','**泉州清真寺（清淨寺）**最早在**北宋**時蓋的。','宋元時期，很多信**伊斯蘭教**的商人在住的地方蓋清真寺，伊斯蘭教就傳開了。','他們懂**天文**和**藥物**，影響了後來中國的**曆法**和**醫學**；元朝還特別請**回回人**（信伊斯蘭教的人）觀察天文、推算曆法。'], like:'像今天外國人來台灣工作，住在同一區、開了自己的餐廳和教堂，也把他們的知識帶進來。'},
     bianjing:{t:'汴京・坊市制度廢除', tag:'宋', body:['**唐代中期以前**，城市分成住人的**坊**和做生意的**市**；市有圍牆，只在固定時間開門。','宋朝生意越來越多，**坊市制度廢除**，在哪裡、幾點都能做生意，**夜市**很熱鬧。','北宋**張擇端**畫的**《清明上河圖》**，畫的就是汴京熱鬧的樣子。'], like:'以前像只有百貨公司營業時間才能買東西；坊市制度廢除後，就像到處都有夜市和便利商店。'},
     jingdezhen:{t:'景德鎮・製瓷業', tag:'南宋・元', body:['唐代以來，海外貿易越來越多，瓷器做得越來越多、也越來越好。','到**南宋和元代**，長江中下游的**景德鎮**變成**陶瓷業的中心**。','宋朝瓷器賣到東北亞、東南亞，**東非**也挖得到碎片。'], like:'景德鎮就像瓷器界的「科學園區」，最好的工廠都集中在這裡。'},
     jiangnan:{t:'江南開發・經濟重心南移', tag:'社會變遷', body:['**永嘉之禍**後，中原的人往南搬，**江南**（長江以南）開始開發。','唐代中晚期以後北方一直亂、南方比較安定，北方人繼續往南搬；到**11世紀末**，南方人口**超過**北方。','**經濟重心南移**：國家收的稅也大多靠南方。','南方的**絲織業**唐代開始興起；到**北宋**時，南方的絲織品已經比北方多。'], like:'像一個城市的熱鬧區從舊市區搬到新市區：人搬過去、店開過去，最後市政府的稅也大多從新市區來。',
@@ -1038,7 +1058,7 @@ function openSheet(title,html,sub){
   bd.querySelectorAll('[data-person]').forEach(b=>b.onclick=()=>showPerson(cur,+b.dataset.person));
   bd.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>showTrade(b.dataset.card));
   bd.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;showStation();});
-  bd.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>openGame());
+  bd.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>b.dataset.game==='voyage'?openVoyage():openGame());
 }
 const TABS=[['book','課本'],['like','打個比方'],['people','當時的人']];
 tabs.innerHTML=TABS.map(([k,n])=>'<button role="tab" data-t="'+k+'">'+n+'</button>').join('');
@@ -1093,6 +1113,7 @@ function showTrade(cid){
   if(c.body)h+=list(c.body);
   if(c.table)h+=tableH(c.table);
   if(c.bars)h+='<b style="font-size:13px">'+esc(c.bars.t)+'</b><div class="bars">'+c.bars.rows.map(r=>'<div class="r"><span>'+esc(r[0])+'</span><div class="b"><span class="n" style="width:'+r[1]+'%">北 '+r[1]+'</span><span class="s" style="width:'+r[2]+'%">南 '+r[2]+'</span></div></div>').join('')+'</div>';
+  if(c.game)h+='<button class="play" data-game="'+esc(c.game)+'">⛵ 試試看：當泉州海商，開船下南洋</button>';
   h+='</div>'+(c.like?likeH(c.like):'')+'<div class="extras">'+D.trade.extras.filter(x=>x.card!==cid).map(x=>'<button data-card="'+x.card+'">'+esc(x.n)+'</button>').join('')+'</div>';
   ensureOpen();openSheet(c.t,h,true);
 }
@@ -1201,6 +1222,116 @@ $('game').addEventListener('click',e=>{if(e.target.id==='game')closeGame();});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('game').hidden)closeGame();});
 addEventListener('resize',()=>{if(!$('game').hidden){gSize();gDraw();}});
 
+/* ---------- 小遊戲：泉州海商下南洋 ----------
+   真實海岸線（NE_BASE.land）畫在 canvas 上，按住拖曳讓船朝手指方向開，碰到陸地會擋住。
+   關卡都對應有出處的史實：季風（九日山祈風石刻）、陰天看指南針（《萍洲可談》）、
+   南海的「長沙」「石塘」（《嶺外代答》）＋水密隔艙（泉州灣宋船）、目的地三佛齊（《諸蕃志》）。
+   網址加 #voyage 會直接打開。 */
+const V={cv:$('vCv'),raf:0};
+const VP={from:[118.6,24.85],to:[104.9,-2.6],reefs:[[112.2,16.4,'西沙一帶'],[114.6,10.2,'南沙一帶']],cloud:[112.6,14.2]};
+function vSize(){
+  const c=V.cv,w=c.clientWidth||600,h=Math.round(Math.min(Math.max(w*1.05,320),innerHeight*.62)),d=devicePixelRatio||1;
+  c.width=w*d;c.height=h*d;c.style.height=h+'px';V.w=w;V.h=h;V.d=d;
+  V.proj=d3.geoMercator().fitExtent([[6,6],[w-6,h-6]],{type:'Feature',geometry:{type:'MultiPoint',coordinates:[[98,27],[124,27],[98,-5],[124,-5]]}});
+  V.u=Math.hypot(...['x','y'].map((_,i)=>V.proj([118,20])[i]-V.proj([119,20])[i]));/* 1 經度幾個像素 */
+  /* 陸地遮罩：碰撞用 */
+  const m=document.createElement('canvas');m.width=w;m.height=h;const mc=m.getContext('2d');mc.fillStyle='#000';
+  d3.geoPath(V.proj,mc)(NE.land);mc.beginPath();d3.geoPath(V.proj,mc)(NE.land);mc.fill();V.mask=mc.getImageData(0,0,w,h).data;
+}
+const vLand=(x,y)=>{x=Math.round(x);y=Math.round(y);if(x<0||y<0||x>=V.w||y>=V.h)return true;return V.mask[(y*V.w+x)*4+3]>0;};
+const vXY=p=>V.proj(p);
+function vDraw(){
+  const c=V.cv.getContext('2d'),W=V.w,H=V.h,s=V.st;c.setTransform(V.d,0,0,V.d,0,0);
+  c.fillStyle='#cfe6e8';c.fillRect(0,0,W,H);
+  const path=d3.geoPath(V.proj,c);
+  c.beginPath();path(NE.land);c.fillStyle='#f3ead6';c.fill();c.strokeStyle='#7fa3a3';c.lineWidth=1;c.stroke();
+  /* 風向箭頭（會慢慢飄） */
+  if(s.season){const [wx,wy]=s.wind,t=performance.now()/1000;c.strokeStyle='rgba(47,111,159,.45)';c.lineWidth=1.6;
+    for(let gx=20;gx<W;gx+=46)for(let gy=20;gy<H;gy+=46){const o=((t*18)%46),x=gx+wx*o,y=gy+wy*o;if(vLand(x,y))continue;
+      c.beginPath();c.moveTo(x-wx*8,y-wy*8);c.lineTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4-wy*3),y+wy*8-(wy*4+wx*3));c.moveTo(x+wx*8,y+wy*8);c.lineTo(x+wx*8-(wx*4+wy*3),y+wy*8-(wy*4-wx*3));c.stroke();}}
+  /* 礁石 */
+  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]),r=V.u*1.6;c.fillStyle='rgba(120,160,150,.25)';c.beginPath();c.arc(x,y,r,0,7);c.fill();
+    c.fillStyle='rgba(90,120,110,.6)';for(let k=0;k<9;k++){const a=k*2.4+i,rr=r*.75*((k*37)%10)/10;c.beginPath();c.arc(x+Math.cos(a)*rr,y+Math.sin(a)*rr,1.6,0,7);c.fill();}});
+  /* 地名 */
+  const lbl=(p,t,col,dy)=>{const [x,y]=vXY(p);c.font='bold 13px sans-serif';c.textAlign='center';c.lineWidth=4;c.strokeStyle='rgba(255,253,246,.92)';c.strokeText(t,x,y+(dy||0));c.fillStyle=col||'#2b2a26';c.fillText(t,x,y+(dy||0));};
+  lbl([116.5,26.3],'宋','#4f7a52');lbl([113.3,23.4],'廣州','#6f6a5e');lbl([108.6,14.2],'占城','#6f6a5e');lbl([114,14.8],'南海','#2f6f9f');
+  {const [x,y]=vXY(VP.from);c.fillStyle='#b5452f';c.beginPath();c.arc(x,y,4,0,7);c.fill();lbl(VP.from,'泉州','#b5452f',-10);}
+  {const [x,y]=vXY(VP.to),p=1+.25*Math.sin(performance.now()/250);c.strokeStyle='#b5452f';c.lineWidth=2.5;c.beginPath();c.arc(x,y,10*p,0,7);c.stroke();lbl(VP.to,'三佛齊','#b5452f',-16);}
+  /* 走過的路 */
+  if(s.trail.length>1){c.strokeStyle='rgba(181,69,47,.5)';c.lineWidth=2;c.setLineDash([4,4]);c.beginPath();s.trail.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();c.setLineDash([]);}
+  /* 船 */
+  c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#8a5a3c';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();
+  c.fillStyle='#fff8e6';c.strokeStyle='#c9a35a';c.lineWidth=1;c.beginPath();c.moveTo(1,-9);c.lineTo(5,0);c.lineTo(1,9);c.lineTo(-2,0);c.closePath();c.fill();c.stroke();c.restore();
+  /* 手指的目標點 */
+  if(s.tgt){c.strokeStyle='rgba(43,42,38,.35)';c.setLineDash([3,4]);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(s.tgt[0],s.tgt[1]);c.stroke();c.setLineDash([]);}
+  /* 烏雲：在雲裡的時候整個畫面變暗，看不到目的地，只剩指南針 */
+  const [cx,cy]=vXY(VP.cloud),cr=V.u*3.2;
+  const g=c.createRadialGradient(cx,cy,cr*.2,cx,cy,cr);g.addColorStop(0,'rgba(90,96,104,.75)');g.addColorStop(1,'rgba(90,96,104,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,cr,0,7);c.fill();
+  if(s.inCloud){c.fillStyle='rgba(40,44,50,.82)';c.fillRect(0,0,W,H);c.save();c.globalCompositeOperation='destination-out';c.restore();
+    c.fillStyle='rgba(255,255,255,.08)';c.beginPath();c.arc(s.x,s.y,30,0,7);c.fill();
+    c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#d8c7a6';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();c.restore();
+    /* 指南針：指著南方 */
+    const kx=W-46,ky=46;c.fillStyle='#fbf7ee';c.beginPath();c.arc(kx,ky,32,0,7);c.fill();c.strokeStyle='#9b8160';c.lineWidth=2;c.stroke();
+    c.fillStyle='#2b2a26';c.font='bold 11px sans-serif';c.textAlign='center';c.fillText('北',kx,ky-19);c.fillText('南',kx,ky+27);
+    c.fillStyle='#b5452f';c.beginPath();c.moveTo(kx,ky+18);c.lineTo(kx-5,ky);c.lineTo(kx+5,ky);c.fill();c.fillStyle='#6f7f86';c.beginPath();c.moveTo(kx,ky-14);c.lineTo(kx-5,ky);c.lineTo(kx+5,ky);c.fill();
+    c.fillStyle='#fbf7ee';c.font='12px sans-serif';c.fillText('指南針',kx,ky+48);}
+  /* 狀態列 */
+  c.textAlign='left';c.font='bold 12px sans-serif';c.fillStyle='rgba(251,247,238,.9)';c.fillRect(6,6,138,22);c.fillStyle='#2b2a26';
+  c.fillText('貨物 '+'▮'.repeat(s.cargo)+'▯'.repeat(10-s.cargo),12,21);
+}
+function vPop(html,btns){const p=$('vPop');p.innerHTML=html+(btns&&btns.length?'<div class="vbtns">'+btns.map((b,i)=>'<button data-i="'+i+'"'+(b.alt?' class="alt"':'')+'>'+b.t+'</button>').join('')+'</div>':'');
+  p.querySelectorAll('button').forEach(el=>el.onclick=()=>btns[+el.dataset.i].f());}
+function vStart(){
+  vSize();let [x,y]=vXY(VP.from);
+  /* 泉州在岸上：從港口往外找最近的一片海當起點 */
+  const sea=(px,py)=>[[0,0],[3,0],[-3,0],[0,3],[0,-3]].every(([dx,dy])=>!vLand(px+dx,py+dy));
+  find:for(let r=2;r<60;r+=2)for(let a=0;a<16;a++){const px=x+r*Math.cos(Math.PI/4+a*Math.PI/8),py=y+r*Math.sin(Math.PI/4+a*Math.PI/8);if(sea(px,py)){x=px;y=py;break find;}}
+  V.st={x,y,hd:Math.PI*.75,tgt:null,trail:[],cargo:10,season:0,wind:[0,0],hit:{},seen:{},inCloud:false,done:false,paused:true};
+  vMsg('');vDraw();
+  vPop('<b class="vt">你是南宋泉州的海商</b><p style="margin:0">船上載滿了瓷器，要往南開到<b>三佛齊</b>（今天的蘇門答臘一帶）去賣。泉州市舶司的官員趙汝适寫的《諸蕃志》，就記載了三佛齊。</p><p style="margin:0"><b>第一步：選什麼時候出海？</b></p>',
+    [{t:'夏天出發',f:()=>vSeason(2)},{t:'冬天出發',f:()=>vSeason(1)}]);
+  cancelAnimationFrame(V.raf);let t0=performance.now();const loop=now=>{vStep(Math.min(.05,(now-t0)/1000));t0=now;vDraw();V.raf=requestAnimationFrame(loop);};V.raf=requestAnimationFrame(loop);
+}
+function vSeason(k){const s=V.st,r=Math.SQRT1_2;s.season=k;s.wind=k===1?[-r,r]:[r,-r];s.paused=false;
+  vPop('');vMsg(k===1?'冬天吹東北季風，風從東北往西南吹（看海上的藍色箭頭）。按住海圖、拖向你想去的方向，船就會朝那裡開。目的地是紅色圓圈。':'夏天吹西南季風，風從西南往東北吹。按住海圖、拖向你想去的方向開開看。');}
+function vMsg(t){$('vMsg').textContent=t;}
+function vStep(dt){
+  const s=V.st;if(!s||s.paused||s.done)return;
+  if(s.tgt){const want=Math.atan2(s.tgt[1]-s.y,s.tgt[0]-s.x);let d=want-s.hd;d=Math.atan2(Math.sin(d),Math.cos(d));s.hd+=Math.max(-3*dt,Math.min(3*dt,d));
+    const hx=Math.cos(s.hd),hy=Math.sin(s.hd),f=hx*s.wind[0]+hy*s.wind[1];
+    const sp=V.u*(f<-.3?.05:.28+.7*Math.max(0,f))*(s.inCloud?.6:1);
+    const nx=s.x+hx*sp*dt,ny=s.y+hy*sp*dt;
+    if(!vLand(nx,ny)){s.x=nx;s.y=ny;}else if(!vLand(nx,s.y))s.x=nx;else if(!vLand(s.x,ny))s.y=ny;
+    if(!s.trail.length||Math.hypot(s.x-s.trail[s.trail.length-1][0],s.y-s.trail[s.trail.length-1][1])>4)s.trail.push([s.x,s.y]);
+    if(f<-.3){s.against=(s.against||0)+dt;if(s.against>2.5&&!s.seen.against){s.seen.against=1;vEvent('against');return;}}}
+  VP.reefs.forEach(([lo,la],i)=>{const [x,y]=vXY([lo,la]);if(!s.hit[i]&&Math.hypot(s.x-x,s.y-y)<V.u*1.4){s.hit[i]=1;s.cargo=Math.max(4,s.cargo-2);vEvent('reef',i);}});
+  const [cx,cy]=vXY(VP.cloud),inC=Math.hypot(s.x-cx,s.y-cy)<V.u*2.6;
+  if(inC&&!s.inCloud&&!s.seen.cloud){s.seen.cloud=1;s.inCloud=true;vEvent('cloud');return;}s.inCloud=inC;
+  const [tx,ty]=vXY(VP.to);if(Math.hypot(s.x-tx,s.y-ty)<V.u*1.2){s.done=true;vEvent('arrive');}
+}
+function vEvent(k,i){
+  const s=V.st;s.paused=true;s.tgt=null;const go=()=>{s.paused=false;vPop('');};
+  if(k==='against')vPop('<b class="vt">逆風，船幾乎不動！</b><p style="margin:0">夏天的西南季風是往北吹的，要往南去的船整趟都在逆風。宋元時期，外國商船是<b>夏天乘西南風來、冬天趁東北風走</b>；泉州的官員每年還會在出海、回航的季節到九日山「祈風」，石刻到今天還在。</p><small>出處：泉州九日山宋代祈風石刻（世界遺產「泉州：宋元中國的世界海洋商貿中心」的一部分）</small>',
+    [{t:'回港，等冬天再出發',f:()=>{vStart();vSeason(1);}}]);
+  else if(k==='reef')vPop('<b class="vt">撞到礁石了！</b><p style="margin:0">南海有很多珊瑚礁，宋代的書上叫它們「<b>長沙</b>」「<b>石塘</b>」。船底破了一個洞，但宋代的海船分成好幾格「<b>水密隔艙</b>」：一格進水，其他格不會跟著淹，船還能繼續開。不過那一格的貨物泡水了。</p><small>出處：周去非《嶺外代答》（1178）記載海上的「長沙」「石塘」；1974 年泉州灣出土的宋代海船有 13 個水密隔艙。</small>',
+    [{t:'繼續開',f:go}]);
+  else if(k==='cloud')vPop('<b class="vt">陰天，看不到太陽和星星！</b><p style="margin:0">宋代的船夫晚上看星星、白天看太陽，<b>陰天就看指南針</b>。右上角的指南針紅色那頭指著<b>南方</b>。三佛齊在南邊偏西一點，照著指南針開出雲區吧！</p><small>出處：朱彧《萍洲可談》（1119），是目前所知最早記載航海用指南針的書之一。</small>',
+    [{t:'看指南針開船',f:go}]);
+  else if(k==='arrive'){const bad=10-s.cargo;
+    vPop('<b class="vt">平安抵達三佛齊！</b><p style="margin:0">'+(bad?'有 '+bad/2+' 次撞到礁石，泡水的瓷器賣不掉，':'一路順利，')+'剩下 <b>'+s.cargo+' 成</b>的瓷器賣掉，換成<b>香料</b>帶回泉州。1974 年在泉州灣出土的宋代海船上，就挖到了香料。</p><p style="margin:0"><b>想一想：什麼時候回家？</b>要等到夏天，西南季風才會把船推回北方。</p><small>出處：泉州灣宋代海船出土文物；九日山祈風石刻。</small>',
+      [{t:'再開一次',f:()=>vStart()}]);
+    vMsg('');}
+}
+function vPtr(e){const r=V.cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+V.cv.addEventListener('pointerdown',e=>{if(!V.st||V.st.paused)return;V.cv.setPointerCapture(e.pointerId);V.st.tgt=vPtr(e);V.st.down=true;});
+V.cv.addEventListener('pointermove',e=>{if(V.st&&V.st.down&&!V.st.paused)V.st.tgt=vPtr(e);});
+const vUp=()=>{if(V.st){V.st.down=false;V.st.tgt=null;}};V.cv.addEventListener('pointerup',vUp);V.cv.addEventListener('pointercancel',vUp);
+function openVoyage(){$('voy').hidden=false;vStart();}
+function closeVoyage(){cancelAnimationFrame(V.raf);$('voy').hidden=true;}
+$('vClose').onclick=closeVoyage;
+$('voy').addEventListener('click',e=>{if(e.target.id==='voy')closeVoyage();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('voy').hidden)closeVoyage();});
+
 /* ---------- 切換站 ---------- */
 const track=$('track');
 D.stations.forEach((st,i)=>{const b=document.createElement('button');b.className='stop';b.innerHTML='<span class="yr">'+esc(st.y)+'</span><span class="dot"></span><span class="nm">'+esc(st.t.split('・')[0])+'</span>';b.onclick=()=>go(i);track.appendChild(b);});
@@ -1225,7 +1356,7 @@ function apply(){
 }
 function go(i){const n=Math.max(0,Math.min(D.stations.length-1,i));if(n!==cur){personSel=-1;if(tab==='people'&&!(D.stations[n].people||[]).length)tab='book';}cur=n;userMoved=false;apply();showStation();flyTo(curView());try{history.replaceState(null,'','#'+D.stations[cur].id);}catch(e){}}
 $('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
-document.addEventListener('keydown',e=>{if(!$('game').hidden||(e.target.closest&&e.target.closest('input,textarea')))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
+document.addEventListener('keydown',e=>{if(!$('game').hidden||!$('voy').hidden||(e.target.closest&&e.target.closest('input,textarea')))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);});
 $('lyPol').onclick=()=>{polOn=!polOn;$('lyPol').setAttribute('aria-pressed',String(polOn));apply();};
 $('lyTrade').onclick=()=>{tradeOn=!tradeOn;$('lyTrade').setAttribute('aria-pressed',String(tradeOn));apply();showStation();flyTo(curView());};
 
@@ -1236,9 +1367,10 @@ let rT;addEventListener('resize',()=>{layout();clearTimeout(rT);rT=setTimeout(()
 layout();
 const GAME_HASH='#trebuchet',GAME_ST=D.stations.findIndex(s=>(s.extra||[]).some(x=>x.game==='trebuchet'));
 const start=location.hash===GAME_HASH?GAME_ST:D.stations.findIndex(s=>'#'+s.id===location.hash);
-addEventListener('hashchange',()=>{if(location.hash===GAME_HASH){go(GAME_ST);openGame();return;}const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
+addEventListener('hashchange',()=>{if(location.hash==='#voyage'){openVoyage();return;}if(location.hash===GAME_HASH){go(GAME_ST);openGame();return;}const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
 cur=start<0?0:start;sheet.dataset.mode='half';apply();showStation();vb=camFor(curView());setVB();
 if(location.hash===GAME_HASH)openGame();
+if(location.hash==='#voyage')openVoyage();
 })();
 </script>
 </body></html>
