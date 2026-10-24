@@ -1271,8 +1271,8 @@ function vDraw(){
   /* 烏雲：在雲裡的時候整個畫面變暗，看不到目的地，只剩指南針 */
   const [cx,cy]=vXY(VP.cloud),cr=V.u*3.2;
   const g=c.createRadialGradient(cx,cy,cr*.2,cx,cy,cr);g.addColorStop(0,'rgba(90,96,104,.75)');g.addColorStop(1,'rgba(90,96,104,0)');c.fillStyle=g;c.beginPath();c.arc(cx,cy,cr,0,7);c.fill();
-  if(s.inCloud){c.fillStyle='rgba(40,44,50,.82)';c.fillRect(0,0,W,H);c.save();c.globalCompositeOperation='destination-out';c.restore();
-    c.fillStyle='rgba(255,255,255,.08)';c.beginPath();c.arc(s.x,s.y,30,0,7);c.fill();
+  /* 全暗：看不到海岸、目的地、走過的路，只看得到自己的船和指南針 */
+  if(s.inCloud){c.fillStyle='#24282e';c.fillRect(0,0,W,H);
     c.save();c.translate(s.x,s.y);c.rotate(s.hd);c.fillStyle='#d8c7a6';c.beginPath();c.moveTo(11,0);c.lineTo(-8,-5);c.lineTo(-10,0);c.lineTo(-8,5);c.closePath();c.fill();c.restore();
     /* 指南針：指著南方 */
     const kx=46,ky=100;c.fillStyle='#fbf7ee';c.beginPath();c.arc(kx,ky,32,0,7);c.fill();c.strokeStyle='#9b8160';c.lineWidth=2;c.stroke();
