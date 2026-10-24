@@ -240,7 +240,7 @@ table.t th{background:var(--paper2);font-weight:700;white-space:nowrap}
       <button id="gFire" class="gfire">發射！</button>
     </div>
     <p class="gmsg" id="gMsg" aria-live="polite"></p>
-    <p class="gnote">小遊戲是示意，距離和數字不是真的史料。</p>
+    <p class="gnote">這是讓你比較兩種投石機的小遊戲，畫面上的遠近是誇張過的，不是真實距離。史實只有：襄陽被圍將近 5 年，回回砲出現後才被打下來。</p>
   </div>
 </div>
 <!--D3:BEGIN-->
@@ -530,7 +530,7 @@ stations:[
   {n:'南遷的宋朝皇室', r:'決定', story:'汴京沒了，皇室的人被抓走了。剩下的我們只能往南走，到南方重新撐起宋朝。', ask:'首都被攻破了，如果是你，會放棄還是重新開始？'}
  ]},
 {id:'speace', y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
- extra:[{k:'冷知識',t:'岳飛為什麼會死？',s:'1142 年初，宋高宗下令處死岳飛。據記載，金國將領完顏宗弼曾說「必殺飛，始可和」，意思是一定要殺了岳飛，才能講和。岳飛的死，和宋金和議脫不了關係。'}],
+ extra:[{k:'想一想',t:'要打，還是要和？兩邊都在吵',s:'不只宋朝在吵，金國也在吵。南宋朝廷分成「主戰派」（例如岳飛、韓世忠）和「主和派」（以秦檜為代表），宋高宗比較想議和。金國那邊，完顏昌（撻懶）曾經主張把河南的土地還給宋；完顏宗弼（兀朮）堅決反對，後來又出兵把河南拿了回來。最後兩國還是簽了和議，南北對峙。'},{k:'冷知識',t:'岳飛為什麼會死？',s:'1142 年初，宋高宗下令處死岳飛。據記載，金國將領完顏宗弼曾說「必殺飛，始可和」，意思是一定要殺了岳飛，才能講和。岳飛的死，和宋金和議脫不了關係。'}],
  regions:[{p:'jin',s:['JIN'],at:[115,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['linan','zhongdu','bianjing2','xingqing'], labels:['tubo','japan'],
   book:['金一直往南打，但被宋軍擋住，**過不了長江**。','後來金、宋簽了**和議**，一個在北、一個在南，長期對立，叫做**南北對峙**。','和澶淵之盟不一樣：這次是宋要向金**稱臣納貢**，兩國**不對等**。','岳飛〈滿江紅〉寫「**靖康恥，猶未雪**」，意思是靖康之禍的恥辱還沒洗刷。'],
@@ -1114,7 +1114,8 @@ $('tog').onclick=e=>{e.stopPropagation();const m=sheet.dataset.mode;setMode(m===
     if(Math.abs(dx)>70&&Math.abs(dy)<45)go(cur+(dx<0?1:-1));},{passive:true});}
 
 /* ---------- 小遊戲：回回砲打襄陽 ----------
-   側面圖：左邊投石機，右邊襄陽城牆。調角度、按發射，石頭照拋物線飛（距離是示意）。
+   側面圖：左邊投石機，右邊襄陽城牆。調角度、按發射，石頭照拋物線飛（遠近是誇張過的，畫面上不標數字）。
+   網址加 #trebuchet 會直接打開這個遊戲（方便分享）。
    人拉的投石機力氣小，怎麼調都丟不到；回回砲用配重，角度對了才打得中。城牆被打中三次就破。 */
 const G={cv:$('gCv'),mode:1,hp:3,busy:false,trail:[],last:[],hits:[],raf:0};
 const GW={wall:300,thick:30,wallH:30,g:9.8,v:[Math.sqrt(205*9.8),Math.sqrt(380*9.8)],view:[-25,345],top:175};
@@ -1143,7 +1144,6 @@ function gDraw(rock,armA){
     c.fillStyle='#f2a9c4';c.beginPath();c.moveTo(fx,fy-26);c.lineTo(fx+20,fy-20);c.lineTo(fx,fy-14);c.fill();
     c.fillStyle='#fff';c.font='bold 9px sans-serif';c.textAlign='left';c.fillText('元',fx+3,fy-17);}
   c.fillStyle='#4a3626';c.font='bold 13px sans-serif';c.textAlign='center';c.fillText('襄陽',wx+wl/2,G.gy+15);
-  c.fillStyle='rgba(43,42,38,.45)';c.font='10px sans-serif';for(let m=50;m<GW.wall;m+=50){c.fillRect(gx(m),G.gy,1,4);c.fillText(m+'',gx(m),G.gy+14);}
   /* 軌跡：灰色虛線是上一發，紅色是這一發 */
   const path=(t,col,dash)=>{if(t.length<2)return;c.setLineDash(dash);c.strokeStyle=col;c.lineWidth=2;c.beginPath();t.forEach(([x,y],i)=>i?c.lineTo(gx(x),gy(y)):c.moveTo(gx(x),gy(y)));c.stroke();c.setLineDash([]);};
   path(G.last,'rgba(43,42,38,.28)',[3,5]);path(G.trail,'rgba(181,69,47,.65)',[6,4]);
@@ -1186,8 +1186,8 @@ function gFire(){
     if(res==='hit'){G.hp--;G.hits.push([Math.max(4,Math.min(GW.wallH-4,hitY)),G.hits.length]);
       if(G.hp>0)gMsg('打中城牆了！裂開了一點，再來（還要 '+G.hp+' 發）。');
       else{gMsg('城牆被打破了！1273 年，襄陽在被圍將近 5 年之後投降，南宋的大門就這樣打開了。');$('gFire').textContent='再玩一次';}}
-    else if(!G.mode)gMsg('丟到 '+Math.round(p[0])+' 公尺就掉下來了，離襄陽還很遠。人拉的投石機力氣不夠，怎麼調角度都打不到，難怪襄陽守了好幾年。換「回回砲」試試！');
-    else if(res==='short')gMsg('掉在 '+Math.round(p[0])+' 公尺，還差一點！調一下角度再試（灰色虛線是上一發）。');
+    else if(!G.mode)gMsg('石頭在半路就掉下來了，碰不到襄陽的城牆。人拉的投石機力氣不夠，怎麼調角度都打不到，難怪襄陽守了好幾年。換「回回砲」試試！');
+    else if(res==='short')gMsg('掉在城牆前面，還差一點！調一下角度再試（灰色虛線是上一發）。');
     else gMsg('太遠了，石頭飛過城牆！調一下角度再試（灰色虛線是上一發）。');
     gDraw();};
   G.raf=requestAnimationFrame(swing);
@@ -1234,9 +1234,11 @@ function layout(){document.documentElement.style.setProperty('--tl-h',document.q
 let rT;addEventListener('resize',()=>{layout();clearTimeout(rT);rT=setTimeout(()=>{vb=camFor(curView());setVB();},120);});
 
 layout();
-const start=D.stations.findIndex(s=>'#'+s.id===location.hash);
-addEventListener('hashchange',()=>{const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
+const GAME_HASH='#trebuchet',GAME_ST=D.stations.findIndex(s=>(s.extra||[]).some(x=>x.game==='trebuchet'));
+const start=location.hash===GAME_HASH?GAME_ST:D.stations.findIndex(s=>'#'+s.id===location.hash);
+addEventListener('hashchange',()=>{if(location.hash===GAME_HASH){go(GAME_ST);openGame();return;}const i=D.stations.findIndex(s=>'#'+s.id===location.hash);if(i>=0&&i!==cur)go(i);});
 cur=start<0?0:start;sheet.dataset.mode='half';apply();showStation();vb=camFor(curView());setVB();
+if(location.hash===GAME_HASH)openGame();
 })();
 </script>
 </body></html>
