@@ -117,6 +117,9 @@ button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--seal);outl
 .blk.why{background:#fdf3e2;border:1.5px solid #ecd3a6}
 .blk.why .badge{background:#9a6b1f;color:#fff;align-self:flex-start}
 .blk.book b{color:var(--book)}
+.blk.extra{background:#eef6f6;border:1.5px dashed #8fbcbc}
+.blk.extra .badge{background:#2f7272;color:#fff;align-self:flex-start}
+.blk.extra .et{font-size:16px;color:#1f5555}
 .blk.like{background:#eaf6ee;border:1.5px solid #a9d3b5}
 .blk.like .badge{background:#2f7a4c;color:#fff;align-self:flex-start}
 .blk.like p{font-size:16px;line-height:1.85}
@@ -378,6 +381,7 @@ arrowKinds:{
 /* ---------- 關鍵站 ----------
    view：這一站要看的範圍 [西經度, 北緯度, 東經度, 南緯度]
    regions：{p:政權, s:形狀(可多個), at:國名位置, n:地圖上的國名, faded:變淡}
+   extra：課外補充 {k:類別, t:標題, s:內容}，顯示在「課本」頁籤，標明不用背
    people：情境想像（第一人稱），ask＝如果是你（不用作答） */
 stations:[
 {id:'s947', y:'947', t:'契丹建遼', view:[100,51,128,33],
@@ -395,6 +399,7 @@ stations:[
   {n:'中原的守將', r:'對手', story:'我們一直守著北邊的城。結果不是被打下來的，是上面的人為了自己當皇帝，把這些城割給了契丹。一紙約定，十六州就換了主人。', ask:'一個人為了自己的位子，把國家的土地送出去，你覺得怎麼樣？'}
  ]},
 {id:'s960', y:'960', t:'北宋建立', view:[97,48,128,20],
+ extra:[{k:'冷知識',t:'宋太宗想搶回燕雲（979年）',s:'宋太宗曾經帶兵北伐，想拿回燕雲十六州，結果在高梁河（今天的北京附近）被遼打得大敗。之後宋朝一直沒能拿回燕雲。石敬瑭送出去很容易，要拿回來卻很難。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,30],n:'北宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['bianjing','dading','hangzhou','guangzhou'], labels:['tubo','nuzhen','japan'],
   book:['**宋太祖趙匡胤**建立宋朝，首都在**汴京**，歷史上叫**北宋**。','北宋比較重視讀書人（**文人政治**），軍隊的發展就受到影響，所以一直搶不回**燕雲十六州**。'],
@@ -409,6 +414,7 @@ stations:[
   {n:'遼國的貴族', r:'對手', story:'南邊新建了一個宋朝，聽說他們最看重讀書人。只要燕雲十六州在我們手上，宋就很難打過來。', ask:'握著對方拿不回去的土地，有什麼好處？'}
  ]},
 {id:'schan', y:'真宗時', t:'澶淵之盟', view:[106,44,125,31],
+ extra:[{k:'數字',t:'歲幣到底有多少？',s:'一開始的約定是：宋每年給遼銀 10 萬兩、絹 20 萬匹。宋朝的一兩大約 40 公克，所以光是銀子，每年就大約 4 公噸。換來的是宋遼之間大約一百年的和平。想一想：用今天的銀價換算，數字看起來好像不大，但當時的銀子比現在珍貴得多，所以不能直接比。'}],
  regions:[{p:'liao',s:['LIAO'],at:[112,43.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['chanzhou','bianjing','dading'], labels:[],
  arrows:[{pts:[[116.4,41.2],[116,38.4],[115.2,36.3]], k:'atk', label:'遼軍南下', la:[117.6,38.2]}],
@@ -425,6 +431,7 @@ stations:[
   {n:'遼國的將領', r:'對手', story:'我們打到這裡，宋的皇帝親自出來了，再打下去我們也會有損失。每年拿銀子和絹，兩國還以兄弟相稱，這樣的條件不錯。', ask:'對遼來說，簽約比繼續打好在哪裡？'}
  ]},
 {id:'s1038', y:'1038', t:'西夏建國', view:[96,47,125,28],
+ extra:[{k:'冷知識',t:'世界最早的紙幣之一：交子',s:'四川的商人先開始用紙做的「交子」代替鐵錢。1023 年，政府設立「交子務」，由官方來發行，這是世界上最早的官方紙幣之一。後來政府發得太多，交子就越來越不值錢。想一想：錢印太多，會發生什麼事？'}],
  regions:[{p:'liao',s:['LIAO'],at:[113,46.5],n:'遼'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,31],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['xingqing','bianjing','dading'], labels:['tubo','nuzhen'],
   book:['**党項人**在五代時慢慢壯大，**1038年**（北宋中期）建國，國號**大夏**，也叫**西夏**。','遼成了東亞最強的國家，**西夏、女真、高麗**都曾向遼**稱臣納貢**：承認遼比自己大，還要送禮。','北宋除了北邊的遼，西邊、南邊也有威脅；朝廷裡還是有人主張要打仗。'],
@@ -439,6 +446,7 @@ stations:[
   {n:'西北邊境的宋朝百姓', r:'百姓', story:'以前只怕北邊的遼，現在西邊也多了西夏。我們的村子在兩個國家中間，大家晚上都睡不太安穩。', ask:'住在兩國交界的地方，你最擔心什麼？'}
  ]},
 {id:'s1115', y:'1115', t:'金國建立', view:[104,52,138,30],
+ extra:[{k:'冷知識',t:'坐船去結盟：海上之盟',s:'遼擋在宋和金的中間，宋的使者只好坐船橫渡渤海去找金國，約好一起打遼：金打遼的中京，宋打燕京。因為是在海上往來談成的，所以叫「海上之盟」。'}],
  regions:[{p:'liao',s:['LIAO'],at:[110,46.5],n:'遼'},{p:'jin',s:['JINE'],at:[129.5,46],n:'金'},{p:'yanyun',s:['YANYUN'],at:[115.4,40],n:'燕雲十六州',small:1},{p:'song',s:['SONGN'],at:[111,33],n:'北宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dading','bianjing'], labels:['japan'],
  arrows:[{pts:[[127,44.5],[124,43],[120.6,42]], k:'atk', label:'金攻遼', la:[124.5,44.4]}],
@@ -485,6 +493,7 @@ stations:[
   {n:'南遷的宋朝皇室', r:'決定', story:'汴京沒了，皇室的人被抓走了。剩下的我們只能往南走，到南方重新撐起宋朝。', ask:'首都被攻破了，如果是你，會放棄還是重新開始？'}
  ]},
 {id:'speace', y:'和議', t:'金宋和議・南北對峙', view:[99,46,127,20],
+ extra:[{k:'冷知識',t:'岳飛為什麼會死？',s:'1142 年初，宋高宗下令處死岳飛。據記載，金國將領完顏宗弼曾說「必殺飛，始可和」，意思是一定要殺了岳飛，才能講和。岳飛的死，和宋金和議脫不了關係。'}],
  regions:[{p:'jin',s:['JIN'],at:[115,41],n:'金'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'xia',s:['XIA'],at:[102.5,40.2],n:'西夏'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['linan','zhongdu','bianjing2','xingqing'], labels:['tubo','japan'],
   book:['金一直往南打，但被宋軍擋住，**過不了長江**。','後來金、宋簽了**和議**，一個在北、一個在南，長期對立，叫做**南北對峙**。','和澶淵之盟不一樣：這次是宋要向金**稱臣納貢**，兩國**不對等**。','岳飛〈滿江紅〉寫「**靖康恥，猶未雪**」，意思是靖康之禍的恥辱還沒洗刷。'],
@@ -532,6 +541,7 @@ stations:[
   {n:'金國的士兵', r:'對手', story:'北邊是蒙古，南邊是南宋，兩邊一起打過來。我們被夾在中間，撐不下去了。', ask:'被兩邊夾攻的時候，還有什麼辦法？'}
  ]},
 {id:'swest', y:'1235～1260', t:'三次西征・四大汗國', view:[26,59,96,27],
+ extra:[{k:'同時的世界',t:'蒙古打到歐洲（1241年）',s:'第二次西征時，蒙古軍在波蘭的列格尼卡、匈牙利的莫希，接連打敗歐洲的騎士。同一年年底，大汗窩闊臺過世，蒙古軍隔年就撤回去了。一般認為，這是歐洲沒有被繼續往西打的原因之一。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'蒙古'},{p:'kipchak',s:['KIPCHAK'],at:[46,54.5],n:'欽察汗國',small:1},{p:'ogedei',s:['OGEDEI'],at:[81,49.5],n:'窩闊臺汗國',small:1},{p:'chagatai',s:['CHAGATAI'],at:[71,42.5],n:'察合臺汗國',small:1},{p:'ilkhan',s:['ILKHAN'],at:[55,32],n:'伊兒汗國',small:1},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1}],
  places:['helin','yemili','samarkand','sarai','baoda'], labels:['europe','india'],
  arrows:[
@@ -551,6 +561,7 @@ stations:[
   {n:'歐洲城市的居民', r:'百姓', story:'從東方來的騎兵到了我們這裡。他們說的話、穿的衣服，都和我們完全不一樣。', ask:'第一次遇到完全不認識的民族，你會害怕還是好奇？'}
  ]},
 {id:'s1271', y:'1271', t:'忽必烈建元', view:[96,50,135,17],
+ extra:[{k:'冷知識',t:'回回砲：靠配重甩出去的投石機',s:'蒙古圍攻襄陽將近 5 年（1268～1273）。後來從波斯（今天的伊朗一帶）來的工程師，做出用重物當配重、把大石頭甩出去的投石機，叫「回回砲」，城才被打下來。中國很早就有靠很多人拉繩子的投石機，回回砲厲害在用配重，石頭可以更重、丟得更遠。'},{k:'同時的世界',t:'神風：颱風擋住了蒙古（1274、1281年）',s:'忽必烈兩次派大軍渡海攻打日本，都沒有成功。1281 年那一次，艦隊被颱風打壞，日本人把這陣風叫做「神風」。至於 1274 年那一次有沒有颱風，學者還有不同的看法。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN'],at:[104,45],n:'元'},{p:'song',s:['SONGS'],at:[112,27.5],n:'南宋'},{p:'dali',s:['DALI'],at:[100.5,25],n:'大理',small:1},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','helin','linan'], labels:['japan','annan'],
  arrows:[{pts:[[127.3,36.4],[129.4,35],[131,33.9]], k:'atk', label:'攻打日本', la:[131.6,36.6]},{pts:[[108.2,26.5],[106.8,23.6],[105.9,21.5]], k:'atk', label:'攻打安南', la:[104.6,23.6]},{pts:[[112.4,35],[112.3,32.4]], k:'atk', label:'南下侵宋', la:[110,33.7]}],
@@ -566,6 +577,7 @@ stations:[
   {n:'南宋的守將', r:'對手', story:'北邊的蒙古建立了元朝，忽必烈的大軍正在往南打。我們還守得住嗎？', ask:'知道對手越來越強，你會怎麼準備？'}
  ]},
 {id:'s1279', y:'1279', t:'元滅南宋・四等人', view:[96,50,128,18],
+ extra:[{k:'冷知識',t:'崖山海戰（1279年）',s:'南宋最後一戰在崖山（今天廣東的海邊）。打輸之後，丞相陸秀夫背著才七、八歲的小皇帝跳海，南宋就此滅亡。'}],
  regions:[{p:'mongol',s:['MONGOL','JIN','SONGS','DALI'],at:[104,44],n:'元'},{p:'goryeo',s:['GORYEO'],at:[127.4,37.5],n:'高麗',small:1}],
  places:['dadu','linan','helin'], labels:['japan','annan'],
  arrows:[{pts:[[114.5,33],[116.6,31.4],[119.6,30.5]], k:'atk', la:[117,33.8], label:'元滅南宋'},{pts:[[112.6,31.5],[112.8,27],[113.2,23.6]], k:'atk'}],
@@ -1000,6 +1012,7 @@ function showStation(){
   if(tab==='book'){
     h+='<div class="blk why"><span class="badge">為什麼會這樣？</span><p>'+esc(st.why)+'</p></div>';
     h+='<div class="blk book"><span class="badge">課本重點</span>'+list(st.book)+(st.table?tableH(st.table):'')+'</div>';
+    if(st.extra)h+=st.extra.map(x=>'<div class="blk extra"><span class="badge">'+esc(x.k)+'・課外補充，不用背</span><b class="et">'+esc(x.t)+'</b><p>'+esc(x.s)+'</p></div>').join('');
     if(st.mapnote)h+='<p class="mapnote">地圖：'+esc(st.mapnote)+'點國家可以看它在〈綜合比較〉表裡的那一列。</p>';
     if(tradeOn)h+=tradeIntro();
     if(D.meta.legend)h+='<p class="mapnote">'+esc(D.meta.legend)+'</p>';
